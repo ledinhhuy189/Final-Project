@@ -1,13 +1,15 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import Header from '../../global/components/Header';
 
 const Main = () => {
    return (
-      <Box>
-         <h1>Header</h1>
-         <Outlet />
-         <h1>Footer</h1>
+      <Box background='#FAFAFA'>
+         <Header />
+         <Container maxW='1400px' mt='4' minH='90vh'>
+            <Outlet />
+         </Container>
       </Box>
    );
 };

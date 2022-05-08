@@ -3,7 +3,7 @@ const authApi = {
       return new Promise((resolve) => {
          setTimeout(() => {
             resolve(true);
-         }, 5000);
+         }, 500);
       });
    },
 };
