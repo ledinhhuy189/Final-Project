@@ -6,8 +6,8 @@ import HomePage from './pages/HomePage';
 const Home = () => {
    return (
       <Routes>
-         <Route path='*' element={<NotFoundPage />} />
          <Route path='/' element={<HomePage />} />
+         <Route path='*' element={<NotFoundPage />} />
       </Routes>
    );
 };
