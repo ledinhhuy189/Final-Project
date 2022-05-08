@@ -10,7 +10,6 @@ import {
    Input,
    InputGroup,
    InputLeftElement,
-   Spinner,
    Text,
 } from '@chakra-ui/react';
 import React from 'react';
@@ -28,7 +27,7 @@ const subMenuStyle = {
 };
 
 const Header = () => {
-   const { loading, userData } = useSelector(authData);
+   const { userData } = useSelector(authData);
 
    return (
       <Center
@@ -65,7 +64,7 @@ const Header = () => {
                   </HStack>
                </GridItem>
                <GridItem w='100%' h='10'>
-                  {!loading && Object.keys(userData).length > 0 ? (
+                  {Object.keys(userData).length > 0 ? (
                      <UserLogin />
                   ) : (
                      <UserNotLogin />

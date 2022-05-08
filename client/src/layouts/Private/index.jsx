@@ -1,5 +1,5 @@
 // import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 import { authData } from '../../features/Auth/authSlice';
