@@ -1,5 +1,6 @@
 import { Search2Icon } from '@chakra-ui/icons';
 import {
+   Avatar,
    Button,
    Center,
    Container,
@@ -9,11 +10,26 @@ import {
    Input,
    InputGroup,
    InputLeftElement,
+   Spinner,
    Text,
 } from '@chakra-ui/react';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { authData } from '../../../features/Auth/authSlice';
+
+const subMenuStyle = {
+   fontWeight: 'bold',
+   color: 'gray.600',
+   transition: '0.2s ease-out',
+   cursor: 'pointer',
+   _hover: {
+      color: 'black',
+   },
+};
 
 const Header = () => {
+   const { loading, userData } = useSelector(authData);
+
    return (
       <Center
          background='white'
@@ -35,37 +51,54 @@ const Header = () => {
                         fontSize='2xl'
                         fontWeight='bold'
                         justifyContent='left'
+                        cursor='pointer'
+                        transition='0.2s ease-out'
+                        _hover={{
+                           transform: 'scale(1.1)',
+                        }}
                      >
                         Logo
                      </Text>
-                     <Text fontWeight='bold' color='gray.600'>
-                        Features
-                     </Text>
-                     <Text fontWeight='bold' color='gray.600'>
-                        Blog
-                     </Text>
-                     <Text fontWeight='bold' color='gray.600'>
-                        Pricing
-                     </Text>
+                     <Text {...subMenuStyle}>Features</Text>
+                     <Text {...subMenuStyle}>Blog</Text>
+                     <Text {...subMenuStyle}>Pricing</Text>
                   </HStack>
                </GridItem>
-
                <GridItem w='100%' h='10'>
-                  <HStack justifyContent='end' spacing='10px'>
-                     <InputGroup w='300px'>
-                        <InputLeftElement
-                           pointerEvents='none'
-                           children={<Search2Icon color='gray.300' />}
-                        />
-                        <Input type='tel' placeholder='Search here...' />
-                     </InputGroup>
-                     <Button>Register</Button>
-                     <Button colorScheme='blue'>Login</Button>
-                  </HStack>
+                  {!loading && Object.keys(userData).length > 0 ? (
+                     <UserLogin />
+                  ) : (
+                     <UserNotLogin />
+                  )}
                </GridItem>
             </Grid>
          </Container>
       </Center>
+   );
+};
+
+const UserLogin = () => {
+   return (
+      <HStack justifyContent='end' spacing='10px'>
+         <Avatar w='40px' h='40px' />
+         <Text>Thanh Nguyen</Text>
+      </HStack>
+   );
+};
+
+const UserNotLogin = () => {
+   return (
+      <HStack justifyContent='end' spacing='10px'>
+         <InputGroup w='300px'>
+            <InputLeftElement
+               pointerEvents='none'
+               children={<Search2Icon color='gray.300' />}
+            />
+            <Input type='tel' placeholder='Search here...' />
+         </InputGroup>
+         <Button>Register</Button>
+         <Button colorScheme='blue'>Login</Button>
+      </HStack>
    );
 };
 
