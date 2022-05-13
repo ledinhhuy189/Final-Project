@@ -5,6 +5,7 @@ import Admin from '../features/Admin';
 import Auth from '../features/Auth';
 import { authData } from '../features/Auth/authSlice';
 import Home from '../features/Home';
+import Profile from '../features/Profile';
 import HomeSpinner from '../global/components/HomeSpinner';
 import NotFoundPage from '../global/pages/NotFoundPage';
 import Main from '../layouts/Main';
@@ -13,7 +14,6 @@ import Private from '../layouts/Private';
 const Routers = () => {
    let location = useLocation();
    const { loading } = useSelector(authData);
-
    return (
       <>
          {loading ? (
@@ -33,6 +33,7 @@ const Routers = () => {
                         </Private>
                      }
                   >
+                     <Route path='/profile/*' element={<Profile />} />
                      <Route path='/admin/*' element={<Admin />} />
                   </Route>
                   <Route path='*' element={<NotFoundPage />} />

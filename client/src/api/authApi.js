@@ -6,8 +6,9 @@ const authApi = {
                name: 'The Thanh',
                phone: '0762634797',
                gender: 'male',
+               email: 'thethanhnguyen.662@gmail.com',
             });
-         }, 500);
+         }, 1000);
       });
    },
 };

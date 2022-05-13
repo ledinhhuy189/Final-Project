@@ -1,20 +1,26 @@
-import { Search2Icon } from '@chakra-ui/icons';
 import {
    Avatar,
    Button,
    Center,
    Container,
+   Flex,
    Grid,
    GridItem,
    HStack,
-   Input,
-   InputGroup,
-   InputLeftElement,
+   Icon,
+   Menu,
+   MenuButton,
+   MenuItem,
+   MenuList,
    Text,
 } from '@chakra-ui/react';
 import React from 'react';
+import { BsFillReplyFill, BsPersonFill } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { authData } from '../../../features/Auth/authSlice';
+import useUserLogged from '../../../hooks/useUserLogged';
+import Search from '../Search';
 
 const subMenuStyle = {
    fontWeight: 'bold',
@@ -28,6 +34,12 @@ const subMenuStyle = {
 
 const Header = () => {
    const { userData } = useSelector(authData);
+   const userLogged = useUserLogged();
+   const navigate = useNavigate();
+
+   const onClickLogo = () => {
+      navigate('/home');
+   };
 
    return (
       <Center
@@ -47,6 +59,7 @@ const Header = () => {
                      spacing='60px'
                   >
                      <Text
+                        onClick={onClickLogo}
                         fontSize='2xl'
                         fontWeight='bold'
                         justifyContent='left'
@@ -64,8 +77,8 @@ const Header = () => {
                   </HStack>
                </GridItem>
                <GridItem w='100%' h='10'>
-                  {Object.keys(userData).length > 0 ? (
-                     <UserLogin />
+                  {userLogged ? (
+                     <UserLogin navigate={navigate} userData={userData} />
                   ) : (
                      <UserNotLogin />
                   )}
@@ -76,25 +89,38 @@ const Header = () => {
    );
 };
 
-const UserLogin = () => {
+const UserLogin = (props) => {
+   const { navigate, userData } = props;
+
+   const onClickProfile = () => {
+      navigate(`/profile/${userData.email}`);
+   };
+
    return (
-      <HStack justifyContent='end' spacing='10px'>
-         <Avatar w='40px' h='40px' />
-         <Text>Thanh Nguyen</Text>
-      </HStack>
+      <Flex justifyContent='end' gap='20px'>
+         <Search />
+         <Menu isLazy>
+            <MenuButton>
+               <Avatar w='40px' h='40px' />
+            </MenuButton>
+            <MenuList>
+               <MenuItem
+                  icon={<Icon as={BsPersonFill} />}
+                  onClick={onClickProfile}
+               >
+                  Profile
+               </MenuItem>
+               <MenuItem icon={<Icon as={BsFillReplyFill} />}>Logout</MenuItem>
+            </MenuList>
+         </Menu>
+      </Flex>
    );
 };
 
 const UserNotLogin = () => {
    return (
       <HStack justifyContent='end' spacing='10px'>
-         <InputGroup w='300px'>
-            <InputLeftElement
-               pointerEvents='none'
-               children={<Search2Icon color='gray.300' />}
-            />
-            <Input type='tel' placeholder='Search here...' />
-         </InputGroup>
+         <Search />
          <Button>Register</Button>
          <Button colorScheme='blue'>Login</Button>
       </HStack>

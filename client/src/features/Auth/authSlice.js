@@ -9,13 +9,15 @@ export const userProfileLocal = createAsyncThunk(
    }
 );
 
+const initialState = {
+   loading: true,
+   error: false,
+   userData: {},
+};
+
 const authSlice = createSlice({
    name: 'auth',
-   initialState: {
-      loading: true,
-      error: false,
-      userData: {},
-   },
+   initialState,
    reducers: {},
    extraReducers: {
       [userProfileLocal.pending]: (state) => {
