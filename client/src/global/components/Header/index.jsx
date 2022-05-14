@@ -80,7 +80,7 @@ const Header = () => {
                   {userLogged ? (
                      <UserLogin navigate={navigate} userData={userData} />
                   ) : (
-                     <UserNotLogin />
+                     <UserNotLogin navigate={navigate} />
                   )}
                </GridItem>
             </Grid>
@@ -117,12 +117,20 @@ const UserLogin = (props) => {
    );
 };
 
-const UserNotLogin = () => {
+const UserNotLogin = (props) => {
+   const { navigate } = props;
+
+   const onClickButton = (button) => {
+      navigate(`/auth/${button}`);
+   };
+
    return (
       <HStack justifyContent='end' spacing='10px'>
          <Search />
-         <Button>Register</Button>
-         <Button colorScheme='blue'>Login</Button>
+         <Button onClick={() => onClickButton('register')}>Register</Button>
+         <Button onClick={() => onClickButton('login')} colorScheme='blue'>
+            Login
+         </Button>
       </HStack>
    );
 };
