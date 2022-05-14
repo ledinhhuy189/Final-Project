@@ -1,11 +1,7 @@
-// import PropTypes from 'prop-types';
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import useUserLogged from '../../hooks/useUserLogged';
-
-Private.propTypes = {};
-
-Private.defaultProps = {};
+import Main from '../Main';
 
 function Private({ children }) {
    let location = useLocation();
@@ -15,7 +11,7 @@ function Private({ children }) {
       return <Navigate to='/auth/login' state={{ from: location }} replace />;
    }
 
-   return children;
+   return <Main />;
 }
 
 export default Private;
