@@ -10,7 +10,7 @@ function App() {
    useEffect(() => {
       const getUserData = async () => {
          try {
-            const action = userProfileLocal();
+            const action = userProfileLocal('thethanhnguyen.662@gmail.com');
             dispatch(action);
          } catch (error) {
             console.log(error);

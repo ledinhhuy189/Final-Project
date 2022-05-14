@@ -1,3 +1,5 @@
+import axiosClient from './axiosClient';
+
 const authApi = {
    isLogin: () => {
       return new Promise((resolve) => {
@@ -10,6 +12,11 @@ const authApi = {
             });
          }, 1000);
       });
+   },
+
+   getMeLocal: (params) => {
+      const url = 'http://localhost:9000/api/user/me/local';
+      return axiosClient.get(url, { params });
    },
 };
 
