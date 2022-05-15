@@ -18,6 +18,8 @@ app.use(
    })
 );
 
+app.use(express.json());
+
 route(app);
 
 app.listen(PORT, () => {

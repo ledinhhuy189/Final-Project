@@ -14,17 +14,17 @@ function App() {
    const { userData } = useSelector(authData);
 
    useEffect(() => {
-      if (!userData.email) return;
+      if (!userData.email || !userData.displayName) return;
       const getUserData = async () => {
          try {
-            const action = userProfileLocal(userData.email);
+            const action = userProfileLocal();
             dispatch(action);
          } catch (error) {
             console.log(error);
          }
       };
       getUserData();
-   }, [dispatch, userData.email]);
+   }, [dispatch, userData.email, userData.displayName]);
 
    useEffect(() => {
       const unregisterAuthObserver = auth.onAuthStateChanged((user) => {

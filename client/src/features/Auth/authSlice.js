@@ -3,8 +3,8 @@ import authApi from '../../api/authApi';
 
 export const userProfileLocal = createAsyncThunk(
    'auth/userProfileLocal',
-   async (email) => {
-      const response = await authApi.getMeLocal({ email });
+   async () => {
+      const response = await authApi.getMeLocal();
       return response;
    }
 );

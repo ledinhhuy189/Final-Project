@@ -1,18 +1,12 @@
-import {
-   Box,
-   Flex,
-   Text,
-   useBoolean,
-   useToast,
-   VStack,
-} from '@chakra-ui/react';
+import { Box, Flex, useBoolean, useToast } from '@chakra-ui/react';
 import React from 'react';
 import { loginWithEmail } from '../../../../firebase';
+import AuthTitle from '../../components/AuthTitle';
 import LoginForm from '../../components/LoginForm';
 
 const LoginPage = () => {
-   const [formLoading, setFormLoading] = useBoolean(false);
    const toast = useToast();
+   const [formLoading, setFormLoading] = useBoolean(false);
 
    const handleSubmitLogin = async (formData) => {
       try {
@@ -50,19 +44,11 @@ const LoginPage = () => {
             alignItems='center'
             flexDirection='column'
          >
-            <VStack
-               minW='400px'
-               justifyContent='start'
-               alignItems='start'
-               mb='30px'
-            >
-               <Text fontSize='35px' fontWeight='bold'>
-                  Login
-               </Text>
-               <Text color='gray.600'>
-                  Welcome back! Please enter your details
-               </Text>
-            </VStack>
+            <AuthTitle
+               title='Welcome'
+               subTitle='Welcome back! Please enter your details'
+            />
+
             <Box>
                <LoginForm
                   handleSubmitLogin={handleSubmitLogin}
