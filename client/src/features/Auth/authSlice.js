@@ -18,7 +18,18 @@ const initialState = {
 const authSlice = createSlice({
    name: 'auth',
    initialState,
-   reducers: {},
+   reducers: {
+      userProfileFirebaseSuccess: (state, action) => {
+         Object.assign(state, {
+            userData: action.payload,
+         });
+      },
+      userProfileFirebaseFail: (state) => {
+         Object.assign(state, {
+            loading: false,
+         });
+      },
+   },
    extraReducers: {
       [userProfileLocal.pending]: (state) => {
          Object.assign(state, {
@@ -30,7 +41,10 @@ const authSlice = createSlice({
          Object.assign(state, {
             loading: false,
             error: false,
-            userData: action.payload,
+            userData: {
+               ...state.userData,
+               ...action.payload,
+            },
          });
       },
       [userProfileLocal.rejected]: (state) => {

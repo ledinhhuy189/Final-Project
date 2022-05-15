@@ -19,6 +19,7 @@ import { BsFillReplyFill, BsPersonFill } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { authData } from '../../../features/Auth/authSlice';
+import logout from '../../../firebase/logout';
 import useUserLogged from '../../../hooks/useUserLogged';
 import Search from '../Search';
 
@@ -96,6 +97,14 @@ const UserLogin = (props) => {
       navigate(`/profile/${userData.email}`);
    };
 
+   const onClickLogout = async () => {
+      const logoutResponse = await logout();
+      if (logoutResponse.message === 'logout_success') {
+         localStorage.setItem('providerData', false);
+         return (window.location = '/home');
+      }
+   };
+
    return (
       <Flex justifyContent='end' gap='20px'>
          <Search />
@@ -110,7 +119,12 @@ const UserLogin = (props) => {
                >
                   Profile
                </MenuItem>
-               <MenuItem icon={<Icon as={BsFillReplyFill} />}>Logout</MenuItem>
+               <MenuItem
+                  icon={<Icon as={BsFillReplyFill} />}
+                  onClick={onClickLogout}
+               >
+                  Logout
+               </MenuItem>
             </MenuList>
          </Menu>
       </Flex>
