@@ -58,6 +58,7 @@ function LoginForm(props) {
                         onClick={handleSubmit}
                         w='full'
                         colorScheme='blue'
+                        type='submit'
                      >
                         Login
                      </Button>

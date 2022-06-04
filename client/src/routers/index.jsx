@@ -3,7 +3,9 @@ import { Route, Routes } from 'react-router-dom';
 import Admin from '../features/Admin';
 import Auth from '../features/Auth';
 import Home from '../features/Home';
+import Message from '../features/Message';
 import Profile from '../features/Profile';
+import Search from '../features/Search';
 import NotFoundPage from '../global/pages/NotFoundPage';
 import Loader from '../layouts/Loader';
 import Main from '../layouts/Main';
@@ -17,9 +19,11 @@ const Routers = () => {
                <Route path='/auth/*' element={<Auth />} />
                <Route element={<Main />}>
                   <Route path='/home/*' element={<Home />} />
+                  <Route path='/search/*' element={<Search />} />
                </Route>
                <Route element={<Private />}>
                   <Route path='/profile/*' element={<Profile />} />
+                  <Route path='/message/*' element={<Message />} />
                   <Route path='/admin/*' element={<Admin />} />
                </Route>
                <Route path='*' element={<NotFoundPage />} />

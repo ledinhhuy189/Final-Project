@@ -23,14 +23,7 @@ const findMeLocal = async (req, res, next) => {
 
 const upsertUserLocal = async (req, res, next) => {
    try {
-      const isUserExist = await userService.findUser({
-         email: req.body.email,
-      });
-
-      if (isUserExist) return res.json({ message: 'user_already_exists' });
-
       const upsertUserResponse = await userService.upsertUser({ ...req.body });
-
       return res.json(upsertUserResponse);
    } catch (error) {
       return next(error);

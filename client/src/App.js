@@ -1,4 +1,4 @@
-import { ChakraProvider, theme } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -8,6 +8,7 @@ import {
 } from './features/Auth/authSlice';
 import { auth } from './firebase/initialize';
 import Routers from './routers';
+import theme from './theme';
 
 function App() {
    const dispatch = useDispatch();

@@ -50,8 +50,8 @@ const Header = () => {
          h='20'
       >
          <Container maxW='1400px'>
-            <Grid templateColumns='repeat(2, 1fr)' gap={6}>
-               <GridItem w='100%' h='10'>
+            <Grid templateColumns='repeat(24, 1fr)' gap={6}>
+               <GridItem colSpan={12}>
                   <HStack
                      w='full'
                      h='full'
@@ -65,19 +65,20 @@ const Header = () => {
                         fontWeight='bold'
                         justifyContent='left'
                         cursor='pointer'
-                        transition='0.2s ease-out'
-                        _hover={{
-                           transform: 'scale(1.1)',
-                        }}
                      >
-                        Logo
+                        Foody
                      </Text>
-                     <Text {...subMenuStyle}>Features</Text>
+                     <Text
+                        {...subMenuStyle}
+                        onClick={() => navigate('/message')}
+                     >
+                        Message
+                     </Text>
                      <Text {...subMenuStyle}>Blog</Text>
                      <Text {...subMenuStyle}>Pricing</Text>
                   </HStack>
                </GridItem>
-               <GridItem w='100%' h='10'>
+               <GridItem colStart={13} colEnd={25}>
                   {userLogged ? (
                      <UserLogin navigate={navigate} userData={userData} />
                   ) : (
