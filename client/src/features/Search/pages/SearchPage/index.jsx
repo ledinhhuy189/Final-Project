@@ -14,6 +14,7 @@ const SearchPage = () => {
          ...search,
          keyword: state?.keyword,
       });
+      // eslint-disable-next-line
    }, [state]);
 
    return (

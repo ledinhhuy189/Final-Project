@@ -4,7 +4,7 @@ import { RiSendPlane2Fill } from 'react-icons/ri';
 
 function MessageInput(props) {
    return (
-      <HStack pb='10' gap='2'>
+      <HStack gap='2'>
          <Input
             type='text'
             placeholder='Type the message...'
