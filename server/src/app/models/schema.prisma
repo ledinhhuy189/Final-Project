@@ -11,8 +11,41 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  photoURL String?
+  id        String    @id
+  email     String    @unique
+  name      String?
+  photoURL  String?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  members   Member[]
+  messages  Message[]
+}
+
+model Conversation {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  members   Member[]
+  messages  Message[]
+}
+
+model Member {
+  id             Int           @id @default(autoincrement())
+  conversationId Int?
+  userId         String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  user           User?         @relation(fields: [userId], references: [id])
+}
+
+model Message {
+  id             Int           @id @default(autoincrement())
+  conversationId Int?
+  userId         String?
+  content        String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  conversation   Conversation? @relation(fields: [conversationId], references: [id])
+  user           User?         @relation(fields: [userId], references: [id])
 }

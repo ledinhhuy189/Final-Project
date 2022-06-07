@@ -22,10 +22,10 @@ const findUser = async ({ email }) => {
    return find;
 };
 
-const upsertUser = async ({ email, name, photoURL = null }) => {
+const upsertUser = async ({ email, name, id, photoURL = null }) => {
    const create = await userModel.upsert({
       where: {
-         email,
+         id,
       },
       update: {
          email,
@@ -33,6 +33,7 @@ const upsertUser = async ({ email, name, photoURL = null }) => {
          photoURL,
       },
       create: {
+         id,
          email,
          name,
          photoURL,

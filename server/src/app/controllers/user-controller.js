@@ -9,12 +9,12 @@ const test = async (req, res, next) => {
 };
 
 const findMeLocal = async (req, res, next) => {
-   const userInfo = req.getUserInfoByToken;
-
    try {
+      const userInfo = req.getUserInfoByToken;
       const response = await userService.findMe({
          email: userInfo.email,
       });
+
       return res.json(response);
    } catch (error) {
       return next(error);
