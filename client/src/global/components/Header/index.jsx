@@ -111,7 +111,7 @@ const UserLogin = (props) => {
          <Search />
          <Menu isLazy>
             <MenuButton>
-               <Avatar w='40px' h='40px' />
+               <Avatar w='40px' h='40px' src={userData.photoURL} />
             </MenuButton>
             <MenuList>
                <MenuItem

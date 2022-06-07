@@ -15,12 +15,12 @@ const authApi = {
    },
 
    getMeLocal: () => {
-      const url = 'http://localhost:9000/api/user/me/local';
+      const url = '/user/me/local';
       return axiosClient.get(url);
    },
 
    upsertAccount: (data) => {
-      const url = 'http://localhost:9000/api/user/upsert';
+      const url = '/user/upsert';
       return axiosClient.post(url, data);
    },
 };

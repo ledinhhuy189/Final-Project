@@ -24,9 +24,10 @@ const RegisterPage = () => {
             });
 
             if (updateProfileResponse.message === 'update_profile_success') {
-               const upsertAccountResponse = await authApi.upsertAccount(
-                  formData
-               );
+               const upsertAccountResponse = await authApi.upsertAccount({
+                  ...formData,
+                  id: registerResponse.uid,
+               });
 
                if (upsertAccountResponse) {
                   setFormLoading.off();

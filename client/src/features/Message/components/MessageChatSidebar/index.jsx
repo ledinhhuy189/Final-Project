@@ -13,17 +13,19 @@ import {
    Text,
 } from '@chakra-ui/react';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function MessageChatSidebar(props) {
+MessageChatSidebar.propTypes = {
+   senderInfo: PropTypes.object,
+};
+
+function MessageChatSidebar({ senderInfo }) {
    return (
       <Box w='full'>
          <Center flexDirection='column' gap='2' mb='3'>
-            <Avatar
-               size='lg'
-               src='https://billboardvn.vn/wp-content/uploads/2021/08/billboard-vn-E78eLHoVEAAQBnR.jpg'
-            />
+            <Avatar size='lg' src={senderInfo?.photoURL} />
             <Text as='h1' fontWeight='bold' fontSize='lg'>
-               thanhnguyen662
+               {senderInfo?.name}
             </Text>
          </Center>
          <Accordion allowMultiple defaultIndex={[0]}>
