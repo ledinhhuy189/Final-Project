@@ -56,7 +56,7 @@ function MessageConversation({ isSelected }) {
          </Flex>
 
          <Flex alignItems='start' justifyContent='start'>
-            <Text as='h4' fontSize='smaller' h='full'>
+            <Text as='h4' fontSize='smaller' h='full' lineHeight='2'>
                3:14 am
             </Text>
          </Flex>

@@ -1,8 +1,19 @@
 import { Avatar, Divider, HStack, Icon, Spacer, Text } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
 import React from 'react';
-import { BsThreeDots } from 'react-icons/bs';
+import { RiMenuFoldFill, RiMenuUnfoldFill } from 'react-icons/ri';
 
-function MessageHeader(props) {
+MessageHeader.propTypes = {
+   isChatSidebarOpen: PropTypes.bool,
+   onChatSidebarToggle: PropTypes.func,
+};
+
+MessageHeader.defaultProps = {
+   isChatSidebarOpen: false,
+   onChatSidebarToggle: null,
+};
+
+function MessageHeader({ isChatSidebarOpen, onChatSidebarToggle }) {
    return (
       <>
          <HStack gap='4' fontWeight='bold' fontSize='lg' color='mainFont'>
@@ -13,7 +24,12 @@ function MessageHeader(props) {
             />
             <Text as='h2'>thanhnguyen662</Text>
             <Spacer />
-            <Icon as={BsThreeDots} fontSize='lg' />
+            <Icon
+               as={isChatSidebarOpen ? RiMenuUnfoldFill : RiMenuFoldFill}
+               fontSize='lg'
+               onClick={onChatSidebarToggle}
+               cursor='pointer'
+            />
          </HStack>
          <Divider my='4' />
       </>
