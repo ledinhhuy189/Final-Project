@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import conversationApi from '../../../../api/conversationApi';
 import messageApi from '../../../../api/messageApi';
 import scrollbar from '../../../../global/styles/scrollbar';
+import socketUserApi from '../../../../socket/userSocketApi';
 import { authData } from '../../../Auth/authSlice';
 import MessageChatBubble from '../MessageChatBubble';
 import MessageChatSidebar from '../MessageChatSidebar';
@@ -21,7 +22,7 @@ function MessageChat(props) {
    const divRef = useRef(null);
    const { conversationId } = useParams();
    const {
-      userData: { id: userId },
+      userData: { id: userId, name, photoURL },
    } = useSelector(authData);
    const { isOpen: isChatSidebarOpen, onToggle: onChatSidebarToggle } =
       useDisclosure();
@@ -64,6 +65,20 @@ function MessageChat(props) {
          const createMessageInDb = await messageApi.createMessage(newMessage);
 
          if (createMessageInDb.message !== 'create_message_success') return;
+
+         socketUserApi.emitMessage({
+            ...newMessage,
+            from: {
+               name,
+               photoURL,
+               userId,
+            },
+            to: {
+               name: senderInfo.name,
+               photoURL: senderInfo.photoURL,
+               userId: senderInfo.id,
+            },
+         });
 
          updateLatestMessageToConversations(newMessage);
          setMessageList([...messageList, newMessage]);

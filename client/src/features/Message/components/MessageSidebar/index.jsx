@@ -1,10 +1,10 @@
 import { HStack, Icon, Spacer, Text, VStack } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
 import React from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { BiMessageSquareAdd } from 'react-icons/bi';
+import { useNavigate, useParams } from 'react-router-dom';
 import MessageConversation from '../MessageConversation';
 import MessageSearch from '../MessageSearch';
-import { BiMessageSquareAdd } from 'react-icons/bi';
-import PropTypes from 'prop-types';
 
 MessageSidebar.propTypes = {
    conversationList: PropTypes.array,

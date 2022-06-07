@@ -8,11 +8,25 @@ import {
 } from './features/Auth/authSlice';
 import { auth } from './firebase/initialize';
 import Routers from './routers';
+import socketUserApi from './socket/userSocketApi';
 import theme from './theme';
 
 function App() {
    const dispatch = useDispatch();
    const { userData } = useSelector(authData);
+
+   useEffect(() => {
+      if (!userData.uid) return;
+      socketUserApi.emitMyInfo({
+         userId: userData.uid,
+      });
+   }, [userData.uid]);
+
+   useEffect(() => {
+      socketUserApi.onReceive((receiveResponse) => {
+         console.log('🚀 ~ receiveResponse', receiveResponse);
+      });
+   }, []);
 
    useEffect(() => {
       if (!userData.email || !userData.displayName) return;
