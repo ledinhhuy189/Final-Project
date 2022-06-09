@@ -17,7 +17,7 @@ function MessageChatBubble({ sentBy, message }) {
 
 function LeftBubble({ message }) {
    return (
-      <Flex justifyContent='start' gap='3'>
+      <Flex gap='3'>
          <Avatar w='42px' h='42px' src={message.user.photoURL} />
 
          <Text as='p' py='3' px='4' bg='gray.200' rounded='xl' maxW='40%'>

@@ -121,7 +121,7 @@ function MessageChat(props) {
 
    return (
       <Flex h='full' w='full' gap='6'>
-         <Flex h='full' w='full' direction='column' flex='2.8'>
+         <Flex h='full' w='full' direction='column' flex='2.8' overflow='auto'>
             <MessageHeader
                onChatSidebarToggle={onChatSidebarToggle}
                isChatSidebarOpen={isChatSidebarOpen}
@@ -135,15 +135,13 @@ function MessageChat(props) {
                css={scrollbar}
             >
                <MessageLoader loading={loading}>
-                  {messageList?.map((message) => {
-                     return (
-                        <MessageChatBubble
-                           sentBy={message.userId === userId ? 'right' : 'left'}
-                           key={message.id}
-                           message={message}
-                        />
-                     );
-                  })}
+                  {messageList?.map((message) => (
+                     <MessageChatBubble
+                        sentBy={message.userId === userId ? 'right' : 'left'}
+                        key={message.id}
+                        message={message}
+                     />
+                  ))}
                </MessageLoader>
 
                <Box ref={divRef} />

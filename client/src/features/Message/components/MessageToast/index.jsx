@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { messageActions } from '../../messageSlice';
-import { useDispatch } from 'react-redux';
 
 MessageToast.propTypes = {
    photoURL: PropTypes.string,
@@ -25,7 +25,8 @@ function MessageToast({ photoURL, content, name, conversationId }) {
    return (
       <Flex
          color='blackAlpha.900'
-         p={3}
+         px={4}
+         py={6}
          bg='white'
          rounded='lg'
          shadow='md'
@@ -35,10 +36,12 @@ function MessageToast({ photoURL, content, name, conversationId }) {
       >
          <Avatar src={photoURL} />
          <Box>
-            <Text as='h2' fontSize='lg' fontWeight='bold' mb='1'>
+            <Text as='h2' fontSize='xl' fontWeight='bold' mb='1'>
                {name}
             </Text>
-            <Text as='p'>{content}</Text>
+            <Text as='p' wordBreak='break-all' noOfLines={4}>
+               {content}
+            </Text>
          </Box>
       </Flex>
    );
