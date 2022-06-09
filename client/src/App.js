@@ -6,6 +6,7 @@ import {
    authData,
    userProfileLocal,
 } from './features/Auth/authSlice';
+import { messageActions } from './features/Message/messageSlice';
 import { auth } from './firebase/initialize';
 import Routers from './routers';
 import socketUserApi from './socket/userSocketApi';
@@ -24,9 +25,10 @@ function App() {
 
    useEffect(() => {
       socketUserApi.onReceive((receiveResponse) => {
-         console.log('🚀 ~ receiveResponse', receiveResponse);
+         const action = messageActions.receiveIncomingMessage(receiveResponse);
+         dispatch(action);
       });
-   }, []);
+   }, [dispatch]);
 
    useEffect(() => {
       if (!userData.email || !userData.displayName) return;

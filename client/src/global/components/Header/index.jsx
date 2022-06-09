@@ -37,18 +37,27 @@ const Header = () => {
    const { userData } = useSelector(authData);
    const userLogged = useUserLogged();
    const navigate = useNavigate();
+   // const toast = useToast();
+   // const incomingMessageRedux = useSelector(incomingMessage);
+   // let location = useLocation();
 
    const onClickLogo = () => {
       navigate('/home');
    };
 
+   // useEffect(() => {
+   //    if (location.pathname.split('/')[1] === 'message') return;
+   //    if (Object.keys(incomingMessageRedux).length <= 0) return;
+
+   //    toast({
+   //       title: `${incomingMessageRedux.content}`,
+   //       position: 'top-right',
+   //       isClosable: true,
+   //    });
+   // }, [incomingMessageRedux, toast, location.pathname]);
+
    return (
-      <Center
-         background='white'
-         borderWidth='7px 0 2px 0'
-         borderTopColor='blue.700'
-         h='20'
-      >
+      <Center background='white' borderWidth='0px 0 2px 0' h='20'>
          <Container maxW='1400px'>
             <Grid templateColumns='repeat(24, 1fr)' gap={6}>
                <GridItem colSpan={12}>

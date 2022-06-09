@@ -12,20 +12,26 @@ import MessageChatBubble from '../MessageChatBubble';
 import MessageChatSidebar from '../MessageChatSidebar';
 import MessageHeader from '../MessageHeader';
 import MessageInput from '../MessageInput';
+import { incomingMessage } from '../../messageSlice';
 
 function MessageChat(props) {
+   const divRef = useRef(null);
+   const { conversationId } = useParams();
+
    const [messageList, setMessageList] = useState([]);
    const [senderInfo, setSenderInfo] = useState({});
    const [textInput, setTextInput] = useState('');
+   const [loading, setLoading] = useState(true);
+
+   const { isOpen: isChatSidebarOpen, onToggle: onChatSidebarToggle } =
+      useDisclosure();
 
    const [updateLatestMessageToConversations] = useOutletContext();
-   const divRef = useRef(null);
-   const { conversationId } = useParams();
+
    const {
       userData: { id: userId, name, photoURL },
    } = useSelector(authData);
-   const { isOpen: isChatSidebarOpen, onToggle: onChatSidebarToggle } =
-      useDisclosure();
+   const incomingMessageRedux = useSelector(incomingMessage);
 
    useEffect(() => {
       divRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -43,12 +49,32 @@ function MessageChat(props) {
                   (member) => member.user.id !== userId
                ).user
             );
+            setLoading(false);
          } catch (error) {
             console.log(error);
+            setLoading(false);
          }
       };
       getMessageInDb();
    }, [conversationId, userId]);
+
+   useEffect(() => {
+      const isObjectEmpty = Object.keys(incomingMessageRedux).length <= 0;
+      const isCorrectConversation = Boolean(
+         incomingMessageRedux.conversationId !== Number(conversationId)
+      );
+
+      if (isObjectEmpty || isCorrectConversation) return;
+
+      // Restructure for correct Object form with object at messageList
+      const restructureObject = {
+         ...incomingMessageRedux,
+         user: incomingMessageRedux.from,
+      };
+
+      setMessageList((prev) => [...prev, restructureObject]);
+      // eslint-disable-next-line
+   }, [incomingMessageRedux]);
 
    const handleSendMessage = async () => {
       try {
@@ -93,7 +119,7 @@ function MessageChat(props) {
    };
 
    return (
-      <Flex h='full' w='full' gap='6' transition='all 0.5s ease-out'>
+      <Flex h='full' w='full' gap='6'>
          <Flex h='full' w='full' direction='column' flex='2.8'>
             <MessageHeader
                onChatSidebarToggle={onChatSidebarToggle}
@@ -107,16 +133,16 @@ function MessageChat(props) {
                gap='2'
                css={scrollbar}
             >
-               {messageList?.map((message) => {
-                  let sentBy = message.userId === userId ? 'right' : 'left';
-                  return (
-                     <MessageChatBubble
-                        sentBy={sentBy}
-                        key={message.id}
-                        message={message}
-                     />
-                  );
-               })}
+               {!loading &&
+                  messageList?.map((message) => {
+                     return (
+                        <MessageChatBubble
+                           sentBy={message.userId === userId ? 'right' : 'left'}
+                           key={message.id}
+                           message={message}
+                        />
+                     );
+                  })}
 
                <Box ref={divRef} />
             </Flex>

@@ -1,13 +1,17 @@
 import { Box, Center, Grid, GridItem, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Outlet, useLocation } from 'react-router-dom';
 import conversationApi from '../../../../api/conversationApi';
 import MessageSidebar from '../../components/MessageSidebar';
+import { incomingMessage } from '../../messageSlice';
 
 function MessagePage(props) {
    let location = useLocation();
 
    const [conversationList, setConversationList] = useState([]);
+   const [loading, setLoading] = useState(true);
+   const incomingMessageRedux = useSelector(incomingMessage);
 
    useEffect(() => {
       const getConversationInDb = async () => {
@@ -15,16 +19,26 @@ function MessagePage(props) {
             const conversationResponse =
                await conversationApi.getConversations();
             setConversationList(conversationResponse);
+            setLoading(false);
          } catch (error) {
             console.log(error);
+            setLoading(false);
          }
       };
       getConversationInDb();
    }, []);
 
+   useEffect(() => {
+      const isObjectEmpty = Object.keys(incomingMessageRedux).length <= 0;
+      if (!isObjectEmpty) {
+         updateLatestMessageToConversations(incomingMessageRedux);
+      }
+      // eslint-disable-next-line
+   }, [incomingMessageRedux]);
+
    const updateLatestMessageToConversations = (message) => {
       setConversationList((prev) => {
-         const conversationIndex = prev.findIndex(
+         const conversationIndex = prev?.findIndex(
             (conversation) => conversation.id === message.conversationId
          );
 
@@ -33,14 +47,11 @@ function MessagePage(props) {
 
          prev.sort((a, b) => {
             const dateA =
-               a.messages.length > 0
-                  ? new Date(a.messages[0].createdAt)
-                  : new Date(a.createdAt);
+               a.messages.length > 0 ? a.messages[0].createdAt : a.createdAt;
             const dateB =
-               b.messages.length > 0
-                  ? new Date(b.messages[0].createdAt)
-                  : new Date(b.createdAt);
-            return dateB - dateA;
+               b.messages.length > 0 ? b.messages[0].createdAt : b.createdAt;
+
+            return new Date(dateB) - new Date(dateA);
          });
 
          return [...prev];
@@ -60,11 +71,19 @@ function MessagePage(props) {
             </GridItem>
 
             <GridItem colSpan={18}>
-               {location.pathname === '/message' ? (
-                  <BlankContent />
-               ) : (
-                  <Outlet context={[updateLatestMessageToConversations]} />
-               )}
+               <>
+                  {!loading && (
+                     <>
+                        {location.pathname === '/message' ? (
+                           <BlankContent />
+                        ) : (
+                           <Outlet
+                              context={[updateLatestMessageToConversations]}
+                           />
+                        )}
+                     </>
+                  )}
+               </>
             </GridItem>
          </Grid>
       </Box>
