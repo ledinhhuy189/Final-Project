@@ -4,17 +4,20 @@ import React from 'react';
 import { BiMessageSquareAdd } from 'react-icons/bi';
 import { useNavigate, useParams } from 'react-router-dom';
 import MessageConversation from '../MessageConversation';
+import MessageLoader from '../MessageLoader';
 import MessageSearch from '../MessageSearch';
 
 MessageSidebar.propTypes = {
    conversationList: PropTypes.array,
+   loading: PropTypes.bool,
 };
 
 MessageSidebar.defaultProps = {
    conversationList: [],
+   loading: false,
 };
 
-function MessageSidebar({ conversationList }) {
+function MessageSidebar({ conversationList, loading }) {
    const navigate = useNavigate();
    const { conversationId } = useParams();
 
@@ -41,19 +44,21 @@ function MessageSidebar({ conversationList }) {
             />
          </HStack>
          <MessageSearch />
-         <VStack w='full' gap='1' alignItems='flex-start'>
-            {conversationList?.map((conversation) => (
-               <MessageConversation
-                  key={conversation.id}
-                  id={conversation.id}
-                  latestMessage={conversation.messages[0]}
-                  sender={conversation.members[0].user}
-                  isSelected={Boolean(
-                     Number(conversationId) === Number(conversation.id)
-                  )}
-               />
-            ))}
-         </VStack>
+         <MessageLoader loading={loading}>
+            <VStack w='full' gap='1' alignItems='flex-start'>
+               {conversationList?.map((conversation) => (
+                  <MessageConversation
+                     key={conversation.id}
+                     id={conversation.id}
+                     latestMessage={conversation.messages[0]}
+                     sender={conversation.members[0].user}
+                     isSelected={Boolean(
+                        Number(conversationId) === Number(conversation.id)
+                     )}
+                  />
+               ))}
+            </VStack>
+         </MessageLoader>
       </VStack>
    );
 }

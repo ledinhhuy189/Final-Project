@@ -13,12 +13,19 @@ import {
    MenuItem,
    MenuList,
    Text,
+   useToast,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BsFillReplyFill, BsPersonFill } from 'react-icons/bs';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { authData } from '../../../features/Auth/authSlice';
+import MessageToast from '../../../features/Message/components/MessageToast';
+import {
+   incomingMessage,
+   isSeenMessage,
+   messageActions,
+} from '../../../features/Message/messageSlice';
 import logout from '../../../firebase/logout';
 import useUserLogged from '../../../hooks/useUserLogged';
 import Search from '../Search';
@@ -34,27 +41,47 @@ const subMenuStyle = {
 };
 
 const Header = () => {
+   const incomingMessageRedux = useSelector(incomingMessage);
+   const isSeenMessageRedux = useSelector(isSeenMessage);
    const { userData } = useSelector(authData);
+
+   const dispatch = useDispatch();
    const userLogged = useUserLogged();
    const navigate = useNavigate();
-   // const toast = useToast();
-   // const incomingMessageRedux = useSelector(incomingMessage);
-   // let location = useLocation();
+   const toast = useToast();
+   let location = useLocation();
 
    const onClickLogo = () => {
       navigate('/home');
    };
 
-   // useEffect(() => {
-   //    if (location.pathname.split('/')[1] === 'message') return;
-   //    if (Object.keys(incomingMessageRedux).length <= 0) return;
+   useEffect(() => {
+      if (Object.keys(incomingMessageRedux).length <= 0 || isSeenMessageRedux)
+         return;
 
-   //    toast({
-   //       title: `${incomingMessageRedux.content}`,
-   //       position: 'top-right',
-   //       isClosable: true,
-   //    });
-   // }, [incomingMessageRedux, toast, location.pathname]);
+      const isSeenMessageAction = messageActions.seenMessage();
+      dispatch(isSeenMessageAction);
+
+      if (
+         location.pathname.split('/').length > 2 &&
+         location.pathname.split('/')[1] === 'message'
+      )
+         return;
+
+      toast({
+         title: incomingMessageRedux.content,
+         isClosable: true,
+         position: 'top-right',
+         render: () => (
+            <MessageToast
+               photoURL={incomingMessageRedux.from.photoURL}
+               content={incomingMessageRedux.content}
+               name={incomingMessageRedux.from.name}
+               conversationId={incomingMessageRedux.conversationId}
+            />
+         ),
+      });
+   }, [incomingMessageRedux, location, toast, isSeenMessageRedux, dispatch]);
 
    return (
       <Center background='white' borderWidth='0px 0 2px 0' h='20'>

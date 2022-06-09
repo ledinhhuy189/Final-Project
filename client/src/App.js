@@ -25,8 +25,10 @@ function App() {
 
    useEffect(() => {
       socketUserApi.onReceive((receiveResponse) => {
-         const action = messageActions.receiveIncomingMessage(receiveResponse);
-         dispatch(action);
+         const receiveAction =
+            messageActions.receiveIncomingMessage(receiveResponse);
+
+         dispatch(receiveAction);
       });
    }, [dispatch]);
 

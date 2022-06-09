@@ -1,6 +1,6 @@
 import { Box, Center, Grid, GridItem, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useLocation } from 'react-router-dom';
 import conversationApi from '../../../../api/conversationApi';
 import MessageSidebar from '../../components/MessageSidebar';
@@ -8,6 +8,7 @@ import { incomingMessage } from '../../messageSlice';
 
 function MessagePage(props) {
    let location = useLocation();
+   const dispatch = useDispatch();
 
    const [conversationList, setConversationList] = useState([]);
    const [loading, setLoading] = useState(true);
@@ -26,21 +27,21 @@ function MessagePage(props) {
          }
       };
       getConversationInDb();
-   }, []);
+   }, [dispatch]);
 
    useEffect(() => {
-      const isObjectEmpty = Object.keys(incomingMessageRedux).length <= 0;
-      if (!isObjectEmpty) {
-         updateLatestMessageToConversations(incomingMessageRedux);
-      }
-      // eslint-disable-next-line
-   }, [incomingMessageRedux]);
+      if (Object.keys(incomingMessageRedux).length <= 0 || loading) return;
+      updateLatestMessageToConversations(incomingMessageRedux);
+   }, [incomingMessageRedux, loading]);
 
    const updateLatestMessageToConversations = (message) => {
       setConversationList((prev) => {
          const conversationIndex = prev?.findIndex(
             (conversation) => conversation.id === message.conversationId
          );
+
+         if (conversationIndex === -1 || conversationIndex === undefined)
+            return;
 
          prev[conversationIndex].messages.length = 0;
          prev[conversationIndex].messages.push(message);
@@ -67,23 +68,18 @@ function MessagePage(props) {
             h='calc(89vh - 30px)'
          >
             <GridItem colSpan={6}>
-               <MessageSidebar conversationList={conversationList} />
+               <MessageSidebar
+                  conversationList={conversationList}
+                  loading={loading}
+               />
             </GridItem>
 
             <GridItem colSpan={18}>
-               <>
-                  {!loading && (
-                     <>
-                        {location.pathname === '/message' ? (
-                           <BlankContent />
-                        ) : (
-                           <Outlet
-                              context={[updateLatestMessageToConversations]}
-                           />
-                        )}
-                     </>
-                  )}
-               </>
+               {location.pathname === '/message' ? (
+                  <BlankContent />
+               ) : (
+                  <Outlet context={[updateLatestMessageToConversations]} />
+               )}
             </GridItem>
          </Grid>
       </Box>

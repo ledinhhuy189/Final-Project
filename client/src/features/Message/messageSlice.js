@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
    incomingMessage: {},
+   isSeen: false,
 };
 
 const messageSlice = createSlice({
@@ -12,6 +13,11 @@ const messageSlice = createSlice({
          Object.assign(state.incomingMessage, {
             ...action.payload,
          });
+
+         state.isSeen = false;
+      },
+      seenMessage: (state) => {
+         state.isSeen = true;
       },
    },
 });
@@ -21,6 +27,7 @@ export const messageActions = messageSlice.actions;
 
 // Selectors
 export const incomingMessage = (state) => state.message.incomingMessage;
+export const isSeenMessage = (state) => state.message.isSeen;
 
 // Reducers
 const messageReducer = messageSlice.reducer;

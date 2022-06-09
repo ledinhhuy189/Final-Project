@@ -13,6 +13,7 @@ import MessageChatSidebar from '../MessageChatSidebar';
 import MessageHeader from '../MessageHeader';
 import MessageInput from '../MessageInput';
 import { incomingMessage } from '../../messageSlice';
+import MessageLoader from '../MessageLoader';
 
 function MessageChat(props) {
    const divRef = useRef(null);
@@ -133,8 +134,8 @@ function MessageChat(props) {
                gap='2'
                css={scrollbar}
             >
-               {!loading &&
-                  messageList?.map((message) => {
+               <MessageLoader loading={loading}>
+                  {messageList?.map((message) => {
                      return (
                         <MessageChatBubble
                            sentBy={message.userId === userId ? 'right' : 'left'}
@@ -143,6 +144,7 @@ function MessageChat(props) {
                         />
                      );
                   })}
+               </MessageLoader>
 
                <Box ref={divRef} />
             </Flex>
