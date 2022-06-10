@@ -1,7 +1,14 @@
-import { HStack, Icon, Input } from '@chakra-ui/react';
+import {
+   HStack,
+   Icon,
+   Input,
+   InputGroup,
+   InputRightElement,
+} from '@chakra-ui/react';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { RiSendPlane2Fill } from 'react-icons/ri';
-import PropTypes from 'prop-types';
+import MessageUpload from '../MessageUpload';
 
 MessageInput.propTypes = {
    handleChangeTextInput: PropTypes.func,
@@ -15,23 +22,37 @@ MessageInput.defaultProps = {
    textInput: '',
 };
 
-function MessageInput({ handleChangeTextInput, textInput, handleSendMessage }) {
+function MessageInput({
+   handleChangeTextInput,
+   textInput,
+   handleSendMessage,
+   onDrop,
+}) {
    return (
       <HStack gap='2' mb='6'>
-         <Input
-            value={textInput}
-            onChange={handleChangeTextInput}
-            type='text'
-            placeholder='Type the message...'
-            py='7'
-            px='6'
-            rounded='full'
-            onKeyDown={(e) => {
-               if (e.key === 'Enter') {
-                  handleSendMessage();
-               }
-            }}
-         />
+         <InputGroup>
+            <Input
+               value={textInput}
+               onChange={(e) => handleChangeTextInput(e.target.value)}
+               type='text'
+               placeholder='Type the message...'
+               py='7'
+               pl='6'
+               pr='16'
+               rounded='full'
+               onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                     handleSendMessage();
+                  }
+               }}
+            />
+            <InputRightElement
+               children={<MessageUpload color='green.500' onDrop={onDrop} />}
+               py='7'
+               pr='8'
+            />
+         </InputGroup>
+
          <Icon
             as={RiSendPlane2Fill}
             fontSize='3xl'

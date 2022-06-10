@@ -1,21 +1,23 @@
-import { Box, Flex, Spacer, useDisclosure } from '@chakra-ui/react';
+import { Box, Flex, Spacer, useDisclosure, useToast } from '@chakra-ui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams, useOutletContext } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import conversationApi from '../../../../api/conversationApi';
 import messageApi from '../../../../api/messageApi';
+import { uploadFile } from '../../../../firebase';
 import scrollbar from '../../../../global/styles/scrollbar';
 import socketUserApi from '../../../../socket/userSocketApi';
 import { authData } from '../../../Auth/authSlice';
+import { incomingMessage } from '../../messageSlice';
 import MessageChatBubble from '../MessageChatBubble';
 import MessageChatSidebar from '../MessageChatSidebar';
 import MessageHeader from '../MessageHeader';
 import MessageInput from '../MessageInput';
-import { incomingMessage } from '../../messageSlice';
 import MessageLoader from '../MessageLoader';
 
 function MessageChat(props) {
+   const toast = useToast();
    const divRef = useRef(null);
    const { conversationId } = useParams();
 
@@ -30,15 +32,16 @@ function MessageChat(props) {
    const [updateLatestMessageToConversations] = useOutletContext();
 
    const {
-      userData: { id: userId, name, photoURL },
+      userData: { id: userId, name, photoURL, email },
    } = useSelector(authData);
    const incomingMessageRedux = useSelector(incomingMessage);
 
    useEffect(() => {
-      divRef.current.scrollIntoView({ behavior: 'smooth' });
+      divRef.current.scrollIntoView({ behavior: 'auto' });
    }, [messageList]);
 
    useEffect(() => {
+      setLoading(true);
       const getMessageInDb = async () => {
          try {
             const messageResponse =
@@ -77,16 +80,17 @@ function MessageChat(props) {
       // eslint-disable-next-line
    }, [incomingMessageRedux]);
 
-   const handleSendMessage = async () => {
+   const handleSendMessage = async (type = 'text', imageURL) => {
       try {
-         if (textInput === '') return;
+         if (type === 'text' && textInput === '') return;
 
          const newMessage = {
             id: uuidv4(),
+            type,
             userId,
             conversationId: Number(conversationId),
             createdAt: new Date().toISOString(),
-            content: textInput,
+            content: type === 'text' ? textInput : imageURL,
          };
 
          const createMessageInDb = await messageApi.createMessage(newMessage);
@@ -115,8 +119,29 @@ function MessageChat(props) {
       }
    };
 
-   const handleChangeTextInput = (e) => {
-      setTextInput(e.target.value);
+   const onDrop = async (file) => {
+      if (
+         file[0].type !== 'image/jpg' &&
+         file[0].type !== 'image/png' &&
+         file[0].type !== 'image/jpeg'
+      )
+         return toast({
+            title: 'Only accept .jpg, .jpeg, and .png',
+            status: 'error',
+            position: 'top-right',
+         });
+
+      const uploadImageURL = await uploadFile({
+         email,
+         file: file[0],
+         baseDirectory: `messages/${conversationId}`,
+      });
+
+      handleSendMessage('image', uploadImageURL);
+   };
+
+   const handleChangeTextInput = (inputValue) => {
+      setTextInput(inputValue);
    };
 
    return (
@@ -151,6 +176,7 @@ function MessageChat(props) {
                textInput={textInput}
                handleChangeTextInput={handleChangeTextInput}
                handleSendMessage={handleSendMessage}
+               onDrop={onDrop}
             />
          </Flex>
 

@@ -37,7 +37,11 @@ function MessageToastReceiveSideEffect(props) {
          render: () => (
             <MessageToast
                photoURL={incomingMessageRedux.from.photoURL}
-               content={incomingMessageRedux.content}
+               content={
+                  incomingMessageRedux.type === 'text'
+                     ? incomingMessageRedux.content
+                     : 'Image'
+               }
                name={incomingMessageRedux.from.name}
                conversationId={incomingMessageRedux.conversationId}
             />

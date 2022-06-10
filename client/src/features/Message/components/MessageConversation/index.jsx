@@ -1,6 +1,6 @@
 import { Avatar, Flex, Text } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 
@@ -53,7 +53,9 @@ function MessageConversation({ isSelected, latestMessage, sender, id }) {
                noOfLines={2}
             >
                {latestMessage?.content
-                  ? latestMessage.content
+                  ? latestMessage.type === 'text'
+                     ? latestMessage.content
+                     : 'Image'
                   : 'No message available'}
             </Text>
          </Flex>
@@ -68,4 +70,4 @@ function MessageConversation({ isSelected, latestMessage, sender, id }) {
    );
 }
 
-export default MessageConversation;
+export default memo(MessageConversation);

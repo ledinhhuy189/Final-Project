@@ -21,6 +21,7 @@ const createMessage = async (formData) => {
          conversationId: Number(formData.conversationId),
          content: formData.content,
          userId: formData.userId,
+         type: formData.type,
       },
    });
 
