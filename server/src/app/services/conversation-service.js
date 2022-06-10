@@ -58,7 +58,62 @@ const findMessageInConversation = async ({ conversationId }) => {
    return find;
 };
 
+const findConversationByMember = async ({ memberName, email, userId }) => {
+   const find = await conversationModel.findMany({
+      where: {
+         AND: [
+            {
+               members: {
+                  some: {
+                     user: {
+                        name: {
+                           contains: memberName,
+                           mode: 'insensitive',
+                        },
+                     },
+                  },
+               },
+            },
+            {
+               members: {
+                  some: {
+                     user: {
+                        email: {
+                           contains: email,
+                        },
+                     },
+                  },
+               },
+            },
+         ],
+      },
+      include: {
+         messages: {
+            take: 1,
+            orderBy: {
+               createdAt: 'desc',
+            },
+         },
+         members: {
+            where: {
+               userId: {
+                  not: {
+                     equals: userId,
+                  },
+               },
+            },
+            select: {
+               user: true,
+            },
+         },
+      },
+   });
+
+   return find;
+};
+
 module.exports = {
    findConversation,
    findMessageInConversation,
+   findConversationByMember,
 };

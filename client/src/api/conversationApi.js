@@ -10,6 +10,11 @@ const conversationApi = {
       const url = `/conversation/${conversationId}`;
       return axiosClient.get(url);
    },
+
+   searchConversationByName: (params) => {
+      const url = '/conversation/search';
+      return axiosClient.get(url, { params });
+   },
 };
 
 export default conversationApi;

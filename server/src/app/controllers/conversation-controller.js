@@ -24,7 +24,25 @@ const findMessageInConversation = async (req, res, next) => {
    }
 };
 
+const searchConversationByName = async (req, res, next) => {
+   try {
+      const userInfo = req.getUserInfoByToken;
+      const searchResponse = await conversationService.findConversationByMember(
+         {
+            memberName: req.query.memberName,
+            email: userInfo.email,
+            userId: userInfo.uid,
+         }
+      );
+
+      return res.json(searchResponse);
+   } catch (error) {
+      return next(error);
+   }
+};
+
 module.exports = {
    findConversationOfUser,
    findMessageInConversation,
+   searchConversationByName,
 };

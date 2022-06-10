@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useLocation } from 'react-router-dom';
 import conversationApi from '../../../../api/conversationApi';
+import useDebounce from '../../../../hooks/useDebounce';
 import MessageSidebar from '../../components/MessageSidebar';
 import { incomingMessage } from '../../messageSlice';
 
@@ -12,9 +13,13 @@ function MessagePage(props) {
 
    const [conversationList, setConversationList] = useState([]);
    const [loading, setLoading] = useState(true);
+   const [searchInput, setSearchInput] = useState('');
+   const debounce = useDebounce(searchInput, 500);
+
    const incomingMessageRedux = useSelector(incomingMessage);
 
    useEffect(() => {
+      if (debounce !== '') return;
       const getConversationInDb = async () => {
          try {
             const conversationResponse =
@@ -27,12 +32,37 @@ function MessagePage(props) {
          }
       };
       getConversationInDb();
-   }, [dispatch]);
+   }, [dispatch, debounce]);
+
+   useEffect(() => {
+      if (debounce === '') return;
+      const searchConversationInDb = async () => {
+         try {
+            const searchResponse =
+               await conversationApi.searchConversationByName({
+                  memberName: debounce,
+               });
+            setLoading(false);
+            setConversationList(searchResponse);
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      searchConversationInDb();
+   }, [debounce]);
+
+   useEffect(() => {
+      setLoading(true);
+   }, [searchInput]);
 
    useEffect(() => {
       if (Object.keys(incomingMessageRedux).length <= 0 || loading) return;
       updateLatestMessageToConversations(incomingMessageRedux);
    }, [incomingMessageRedux, loading]);
+
+   const handleChangeSearch = (e) => {
+      setSearchInput(e.target.value);
+   };
 
    const updateLatestMessageToConversations = (message) => {
       setConversationList((prev) => {
@@ -69,6 +99,7 @@ function MessagePage(props) {
          >
             <GridItem colSpan={6}>
                <MessageSidebar
+                  handleChangeSearch={handleChangeSearch}
                   conversationList={conversationList}
                   loading={loading}
                />

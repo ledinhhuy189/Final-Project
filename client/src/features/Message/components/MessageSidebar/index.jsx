@@ -10,14 +10,16 @@ import MessageSearch from '../MessageSearch';
 MessageSidebar.propTypes = {
    conversationList: PropTypes.array,
    loading: PropTypes.bool,
+   handleChangeSearch: PropTypes.func,
 };
 
 MessageSidebar.defaultProps = {
    conversationList: [],
    loading: false,
+   handleChangeSearch: null,
 };
 
-function MessageSidebar({ conversationList, loading }) {
+function MessageSidebar({ conversationList, loading, handleChangeSearch }) {
    const navigate = useNavigate();
    const { conversationId } = useParams();
 
@@ -43,7 +45,7 @@ function MessageSidebar({ conversationList, loading }) {
                color='gray.600'
             />
          </HStack>
-         <MessageSearch />
+         <MessageSearch onChangeSearch={handleChangeSearch} />
          <MessageLoader loading={loading}>
             <VStack w='full' gap='1' alignItems='flex-start'>
                {conversationList?.map((conversation) => (

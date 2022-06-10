@@ -4,6 +4,11 @@ const { conversationController } = require('../app/controllers');
 const { tokenVerify } = require('../firebase');
 
 router.get(
+   '/search',
+   tokenVerify,
+   conversationController.searchConversationByName
+);
+router.get(
    '/:conversationId',
    tokenVerify,
    conversationController.findMessageInConversation
