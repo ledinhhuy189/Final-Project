@@ -1,7 +1,7 @@
 import { Box, Flex, Spacer, useDisclosure, useToast } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useOutletContext, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import conversationApi from '../../../../api/conversationApi';
 import messageApi from '../../../../api/messageApi';
@@ -18,6 +18,7 @@ import MessageInput from '../MessageInput';
 import MessageLoader from '../MessageLoader';
 
 function MessageChat(props) {
+   const navigate = useNavigate();
    const toast = useToast();
    const divRef = useRef(null);
    const { conversationId } = useParams();
@@ -159,6 +160,10 @@ function MessageChat(props) {
       onImageOpen(true);
    }, []);
 
+   const handleClickSenderInfo = useCallback(() => {
+      navigate(`/profile/${senderInfo.email}`);
+   }, [senderInfo.email]);
+
    return (
       <>
          <Flex h='full' w='full' gap='6'>
@@ -173,6 +178,7 @@ function MessageChat(props) {
                   onChatSidebarToggle={onChatSidebarToggle}
                   isChatSidebarOpen={isChatSidebarOpen}
                   senderInfo={senderInfo}
+                  handleClickSenderInfo={handleClickSenderInfo}
                />
                <Flex
                   direction='column'
@@ -212,6 +218,7 @@ function MessageChat(props) {
                <MessageChatSidebar
                   senderInfo={senderInfo}
                   handleOpenImageModal={handleOpenImageModal}
+                  handleClickSenderInfo={handleClickSenderInfo}
                />
             </Flex>
          </Flex>

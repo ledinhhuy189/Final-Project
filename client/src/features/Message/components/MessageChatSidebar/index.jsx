@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { getDownloadURL } from 'firebase/storage';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import listFiles from '../../../../firebase/listFiles';
 import scrollbar from '../../../../global/styles/scrollbar';
@@ -23,9 +23,14 @@ import MessageLoader from '../MessageLoader';
 MessageChatSidebar.propTypes = {
    senderInfo: PropTypes.object,
    handleOpenImageModal: PropTypes.func.isRequired,
+   handleClickSenderInfo: PropTypes.func.isRequired,
 };
 
-function MessageChatSidebar({ senderInfo, handleOpenImageModal }) {
+function MessageChatSidebar({
+   senderInfo,
+   handleOpenImageModal,
+   handleClickSenderInfo,
+}) {
    const { conversationId } = useParams();
 
    const [imageList, setImageList] = useState([]);
@@ -46,7 +51,13 @@ function MessageChatSidebar({ senderInfo, handleOpenImageModal }) {
 
    return (
       <Box w='full'>
-         <Center flexDirection='column' gap='2' mb='3'>
+         <Center
+            flexDirection='column'
+            gap='2'
+            mb='3'
+            onClick={handleClickSenderInfo}
+            cursor='pointer'
+         >
             <Avatar size='lg' src={senderInfo?.photoURL} />
             <Text as='h1' fontWeight='bold' fontSize='lg'>
                {senderInfo?.name}
@@ -96,4 +107,4 @@ function MessageChatSidebar({ senderInfo, handleOpenImageModal }) {
    );
 }
 
-export default MessageChatSidebar;
+export default memo(MessageChatSidebar);
