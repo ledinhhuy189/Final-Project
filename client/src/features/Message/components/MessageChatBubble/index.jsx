@@ -5,17 +5,28 @@ import React, { memo } from 'react';
 MessageChatBubble.propTypes = {
    sentBy: PropTypes.string.isRequired,
    message: PropTypes.object,
+   handleOpenImageModal: PropTypes.func.isRequired,
 };
 
-function MessageChatBubble({ sentBy, message }) {
+function MessageChatBubble({ sentBy, message, handleOpenImageModal }) {
    if (sentBy === 'left') {
-      return <LeftBubble message={message} />;
+      return (
+         <LeftBubble
+            message={message}
+            handleOpenImageModal={handleOpenImageModal}
+         />
+      );
    }
 
-   return <RightBubble message={message} />;
+   return (
+      <RightBubble
+         message={message}
+         handleOpenImageModal={handleOpenImageModal}
+      />
+   );
 }
 
-function LeftBubble({ message }) {
+function LeftBubble({ message, handleOpenImageModal }) {
    return (
       <Flex gap='3'>
          <Avatar w='42px' h='42px' src={message.user.photoURL} />
@@ -24,13 +35,20 @@ function LeftBubble({ message }) {
                {message.content}
             </Text>
          ) : (
-            <Image src={message.content} maxW='40%' py='3' px='4' />
+            <Image
+               cursor='pointer'
+               src={message.content}
+               maxW='40%'
+               py='3'
+               px='4'
+               onClick={() => handleOpenImageModal(message.content)}
+            />
          )}
       </Flex>
    );
 }
 
-function RightBubble({ message }) {
+function RightBubble({ message, handleOpenImageModal }) {
    return (
       <Flex justifyContent='end' pr='1'>
          {message.type === 'text' ? (
@@ -45,7 +63,14 @@ function RightBubble({ message }) {
                <Text as='p'>{message.content}</Text>
             </Box>
          ) : (
-            <Image src={message.content} maxW='48%' py='3' px='4' />
+            <Image
+               cursor='pointer'
+               src={message.content}
+               maxW='48%'
+               py='3'
+               px='4'
+               onClick={() => handleOpenImageModal(message.content)}
+            />
          )}
       </Flex>
    );

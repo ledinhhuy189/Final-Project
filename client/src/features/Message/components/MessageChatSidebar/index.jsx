@@ -22,9 +22,10 @@ import MessageLoader from '../MessageLoader';
 
 MessageChatSidebar.propTypes = {
    senderInfo: PropTypes.object,
+   handleOpenImageModal: PropTypes.func.isRequired,
 };
 
-function MessageChatSidebar({ senderInfo }) {
+function MessageChatSidebar({ senderInfo, handleOpenImageModal }) {
    const { conversationId } = useParams();
 
    const [imageList, setImageList] = useState([]);
@@ -71,7 +72,13 @@ function MessageChatSidebar({ senderInfo }) {
                   <SimpleGrid columns={2} spacing={2}>
                      <MessageLoader loading={listLoading}>
                         {imageList?.map((image, index) => (
-                           <AspectRatio ratio={1} w='full' key={index}>
+                           <AspectRatio
+                              ratio={1}
+                              w='full'
+                              key={index}
+                              cursor='pointer'
+                              onClick={() => handleOpenImageModal(image)}
+                           >
                               <Image rounded='xl' src={image} />
                            </AspectRatio>
                         ))}

@@ -1,5 +1,5 @@
 import { Box, Flex, Spacer, useDisclosure, useToast } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useOutletContext, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,6 +13,7 @@ import { incomingMessage } from '../../messageSlice';
 import MessageChatBubble from '../MessageChatBubble';
 import MessageChatSidebar from '../MessageChatSidebar';
 import MessageHeader from '../MessageHeader';
+import MessageImageModal from '../MessageImageModal';
 import MessageInput from '../MessageInput';
 import MessageLoader from '../MessageLoader';
 
@@ -25,11 +26,18 @@ function MessageChat(props) {
    const [senderInfo, setSenderInfo] = useState({});
    const [textInput, setTextInput] = useState('');
    const [loading, setLoading] = useState(true);
+   const [modalImageSrc, setImageModalSrc] = useState('');
 
    const { isOpen: isChatSidebarOpen, onToggle: onChatSidebarToggle } =
       useDisclosure({
          defaultIsOpen: true,
       });
+
+   const {
+      isOpen: isImageOpen,
+      onClose: onImageClose,
+      onOpen: onImageOpen,
+   } = useDisclosure();
 
    const [updateLatestMessageToConversations] = useOutletContext();
 
@@ -146,51 +154,73 @@ function MessageChat(props) {
       setTextInput(inputValue);
    };
 
+   const handleOpenImageModal = useCallback((url) => {
+      setImageModalSrc(url);
+      onImageOpen(true);
+   }, []);
+
    return (
-      <Flex h='full' w='full' gap='6'>
-         <Flex h='full' w='full' direction='column' flex='2.8' overflow='auto'>
-            <MessageHeader
-               onChatSidebarToggle={onChatSidebarToggle}
-               isChatSidebarOpen={isChatSidebarOpen}
-               senderInfo={senderInfo}
-            />
+      <>
+         <Flex h='full' w='full' gap='6'>
             <Flex
+               h='full'
+               w='full'
                direction='column'
-               maxH='calc(68vh - 1vh)'
+               flex='2.8'
                overflow='auto'
-               gap='2'
-               css={scrollbar}
             >
-               <MessageLoader loading={loading}>
-                  {messageList?.map((message) => (
-                     <MessageChatBubble
-                        sentBy={message.userId === userId ? 'right' : 'left'}
-                        key={message.id}
-                        message={message}
-                     />
-                  ))}
-               </MessageLoader>
+               <MessageHeader
+                  onChatSidebarToggle={onChatSidebarToggle}
+                  isChatSidebarOpen={isChatSidebarOpen}
+                  senderInfo={senderInfo}
+               />
+               <Flex
+                  direction='column'
+                  maxH='calc(68vh - 1vh)'
+                  overflow='auto'
+                  gap='2'
+                  css={scrollbar}
+               >
+                  <MessageLoader loading={loading}>
+                     {messageList?.map((message) => (
+                        <MessageChatBubble
+                           sentBy={message.userId === userId ? 'right' : 'left'}
+                           key={message.id}
+                           message={message}
+                           handleOpenImageModal={handleOpenImageModal}
+                        />
+                     ))}
+                  </MessageLoader>
 
-               <Box ref={divRef} />
+                  <Box ref={divRef} />
+               </Flex>
+               <Spacer />
+               <MessageInput
+                  textInput={textInput}
+                  handleChangeTextInput={handleChangeTextInput}
+                  handleSendMessage={handleSendMessage}
+                  onDrop={onDrop}
+               />
             </Flex>
-            <Spacer />
-            <MessageInput
-               textInput={textInput}
-               handleChangeTextInput={handleChangeTextInput}
-               handleSendMessage={handleSendMessage}
-               onDrop={onDrop}
-            />
-         </Flex>
 
-         <Flex
-            h='full'
-            w='full'
-            flex='1'
-            display={isChatSidebarOpen ? 'flex' : 'none'}
-         >
-            <MessageChatSidebar senderInfo={senderInfo} />
+            <Flex
+               h='full'
+               w='full'
+               flex='1'
+               display={isChatSidebarOpen ? 'flex' : 'none'}
+            >
+               <MessageChatSidebar
+                  senderInfo={senderInfo}
+                  handleOpenImageModal={handleOpenImageModal}
+               />
+            </Flex>
          </Flex>
-      </Flex>
+         <MessageImageModal
+            isOpen={isImageOpen}
+            onClose={onImageClose}
+            imageSrc={modalImageSrc}
+         />
+      </>
    );
 }
 
