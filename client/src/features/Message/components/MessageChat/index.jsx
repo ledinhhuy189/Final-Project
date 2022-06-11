@@ -27,7 +27,9 @@ function MessageChat(props) {
    const [loading, setLoading] = useState(true);
 
    const { isOpen: isChatSidebarOpen, onToggle: onChatSidebarToggle } =
-      useDisclosure();
+      useDisclosure({
+         defaultIsOpen: true,
+      });
 
    const [updateLatestMessageToConversations] = useOutletContext();
 

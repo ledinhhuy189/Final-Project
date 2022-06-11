@@ -12,14 +12,37 @@ import {
    SimpleGrid,
    Text,
 } from '@chakra-ui/react';
-import React from 'react';
+import { getDownloadURL } from 'firebase/storage';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import listFiles from '../../../../firebase/listFiles';
+import scrollbar from '../../../../global/styles/scrollbar';
+import MessageLoader from '../MessageLoader';
 
 MessageChatSidebar.propTypes = {
    senderInfo: PropTypes.object,
 };
 
 function MessageChatSidebar({ senderInfo }) {
+   const { conversationId } = useParams();
+
+   const [imageList, setImageList] = useState([]);
+   const [listLoading, setListLoading] = useState(true);
+
+   useEffect(() => {
+      setListLoading(true);
+      listFiles(`messages/${conversationId}`, async (res) => {
+         const promiseURL = res.items.map(async (folderRef) => {
+            return await getDownloadURL(folderRef);
+         });
+
+         const result = await Promise.all(promiseURL);
+         setImageList(result);
+         setListLoading(false);
+      });
+   }, [conversationId]);
+
    return (
       <Box w='full'>
          <Center flexDirection='column' gap='2' mb='3'>
@@ -28,42 +51,36 @@ function MessageChatSidebar({ senderInfo }) {
                {senderInfo?.name}
             </Text>
          </Center>
-         <Accordion allowMultiple defaultIndex={[0]}>
+         <Accordion
+            allowMultiple
+            defaultIndex={[0]}
+            maxH='68vh'
+            overflow='auto'
+            css={scrollbar}
+         >
             <AccordionItem>
-               <h2>
+               <Text as='h2'>
                   <AccordionButton>
                      <Box flex='1' textAlign='left'>
                         Images
                      </Box>
                      <AccordionIcon />
                   </AccordionButton>
-               </h2>
+               </Text>
                <AccordionPanel pb={4}>
                   <SimpleGrid columns={2} spacing={2}>
-                     <AspectRatio ratio={1} w='full'>
-                        <Image
-                           rounded='xl'
-                           src='https://file.tinnhac.com/resize/600x-/2021/01/07/20210107120124-23fc.jpg'
-                        />
-                     </AspectRatio>
-                     <AspectRatio ratio={1} w='full'>
-                        <Image
-                           rounded='xl'
-                           src='https://bennettknowsdotcom.files.wordpress.com/2015/05/the-weeknd-hills.jpg'
-                        />
-                     </AspectRatio>
-                     <AspectRatio ratio={1} w='full'>
-                        <Image
-                           rounded='xl'
-                           src='https://bennettknowsdotcom.files.wordpress.com/2015/05/the-weeknd-hills.jpg'
-                        />
-                     </AspectRatio>
-                     <AspectRatio ratio={1} w='full'>
-                        <Image
-                           rounded='xl'
-                           src='https://file.tinnhac.com/resize/600x-/2021/01/07/20210107120124-23fc.jpg'
-                        />
-                     </AspectRatio>
+                     <MessageLoader loading={listLoading}>
+                        {imageList?.map((image, index) => (
+                           <AspectRatio ratio={1} w='full' key={index}>
+                              <Image rounded='xl' src={image} />
+                           </AspectRatio>
+                        ))}
+                        {imageList.length === 0 && !listLoading && (
+                           <Text as='h2' color='gray.500'>
+                              No Image
+                           </Text>
+                        )}
+                     </MessageLoader>
                   </SimpleGrid>
                </AccordionPanel>
             </AccordionItem>
