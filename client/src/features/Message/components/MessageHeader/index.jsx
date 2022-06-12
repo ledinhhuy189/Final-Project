@@ -30,10 +30,16 @@ function MessageHeader({
             fontWeight='bold'
             fontSize='lg'
             color='mainFont'
-            onClick={handleClickSenderInfo}
          >
-            <Avatar w='50px' h='50px' src={senderInfo?.photoURL} />
-            <Text as='h2'>{senderInfo?.name}</Text>
+            <Avatar
+               w='50px'
+               h='50px'
+               src={senderInfo?.photoURL}
+               onClick={handleClickSenderInfo}
+            />
+            <Text as='h2' onClick={handleClickSenderInfo}>
+               {senderInfo?.name}
+            </Text>
             <Spacer />
             <Icon
                as={isChatSidebarOpen ? RiMenuUnfoldFill : RiMenuFoldFill}

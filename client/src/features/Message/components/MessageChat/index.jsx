@@ -30,9 +30,7 @@ function MessageChat(props) {
    const [modalImageSrc, setImageModalSrc] = useState('');
 
    const { isOpen: isChatSidebarOpen, onToggle: onChatSidebarToggle } =
-      useDisclosure({
-         defaultIsOpen: true,
-      });
+      useDisclosure();
 
    const {
       isOpen: isImageOpen,
@@ -158,10 +156,12 @@ function MessageChat(props) {
    const handleOpenImageModal = useCallback((url) => {
       setImageModalSrc(url);
       onImageOpen(true);
+      // eslint-disable-next-line
    }, []);
 
    const handleClickSenderInfo = useCallback(() => {
       navigate(`/profile/${senderInfo.email}`);
+      // eslint-disable-next-line
    }, [senderInfo.email]);
 
    return (

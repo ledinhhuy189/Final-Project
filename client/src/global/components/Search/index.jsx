@@ -26,12 +26,13 @@ function Search(props) {
 
    return (
       <>
-         <InputGroup w='300px'>
+         <InputGroup w='full'>
             <InputLeftElement
                pointerEvents='none'
                children={<Search2Icon color='gray.300' />}
             />
             <Input
+               rounded='full'
                type='text'
                placeholder='Search here...'
                onKeyDown={onClickSearch}

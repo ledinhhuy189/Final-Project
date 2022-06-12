@@ -30,7 +30,7 @@ function MessageSidebar({ conversationList, loading, handleChangeSearch }) {
             fontSize='2xl'
             onClick={() => navigate('/message')}
             cursor='pointer'
-            lineHeight='1'
+            mt='2'
          >
             Messages
          </Text>

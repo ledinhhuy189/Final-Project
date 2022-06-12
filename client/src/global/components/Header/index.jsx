@@ -1,7 +1,7 @@
 import {
-   Avatar,
    Button,
    Center,
+   Circle,
    Container,
    Flex,
    Grid,
@@ -15,7 +15,13 @@ import {
    Text,
 } from '@chakra-ui/react';
 import React from 'react';
-import { BsFillReplyFill, BsPersonFill } from 'react-icons/bs';
+import {
+   BsBagFill,
+   BsFillPersonFill,
+   BsFillReplyFill,
+   BsHeartFill,
+   BsPersonFill,
+} from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { authData } from '../../../features/Auth/authSlice';
@@ -24,12 +30,11 @@ import useUserLogged from '../../../hooks/useUserLogged';
 import Search from '../Search';
 
 const subMenuStyle = {
-   fontWeight: 'bold',
-   color: 'gray.600',
+   color: 'gray.500',
    transition: '0.2s ease-out',
    cursor: 'pointer',
    _hover: {
-      color: 'black',
+      color: 'green.600',
    },
 };
 
@@ -61,6 +66,7 @@ const Header = () => {
                         fontWeight='bold'
                         justifyContent='left'
                         cursor='pointer'
+                        color='green.600'
                      >
                         Foody
                      </Text>
@@ -74,7 +80,7 @@ const Header = () => {
                      <Text {...subMenuStyle}>Pricing</Text>
                   </HStack>
                </GridItem>
-               <GridItem colStart={13} colEnd={25}>
+               <GridItem colStart={16} colEnd={25}>
                   {userLogged ? (
                      <UserLogin navigate={navigate} userData={userData} />
                   ) : (
@@ -105,9 +111,33 @@ const UserLogin = (props) => {
    return (
       <Flex justifyContent='end' gap='20px'>
          <Search />
+         <Circle
+            borderColor='gray.300'
+            borderWidth='1px'
+            size='40px'
+            cursor='pointer'
+         >
+            <Icon as={BsHeartFill} fontSize='md' color='green.600' />
+         </Circle>
+         <Circle
+            borderColor='gray.300'
+            borderWidth='1px'
+            size='40px'
+            cursor='pointer'
+            onClick={() => navigate('/cart')}
+         >
+            <Icon as={BsBagFill} fontSize='md' color='green.600' />
+         </Circle>
          <Menu isLazy>
             <MenuButton>
-               <Avatar w='40px' h='40px' src={userData.photoURL} />
+               <Circle
+                  borderColor='gray.300'
+                  borderWidth='1px'
+                  size='40px'
+                  cursor='pointer'
+               >
+                  <Icon as={BsFillPersonFill} fontSize='xl' color='green.600' />
+               </Circle>
             </MenuButton>
             <MenuList>
                <MenuItem

@@ -90,7 +90,7 @@ function MessagePage(props) {
    };
 
    return (
-      <Box bg='white' px='30px' pt='20px' rounded='2xl' shadow='sm'>
+      <Box bg='white' px='30px' pt='20px' rounded='2xl' shadow='xl'>
          <Grid
             templateColumns='repeat(24, 1fr)'
             gap='6'

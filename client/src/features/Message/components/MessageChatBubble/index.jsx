@@ -55,7 +55,7 @@ function RightBubble({ message, handleOpenImageModal }) {
             <Box
                py='3'
                px='4'
-               bg='blue.400'
+               bg='green.500'
                color='white'
                rounded='xl'
                maxW='48%'
