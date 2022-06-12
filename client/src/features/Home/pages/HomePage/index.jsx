@@ -1,34 +1,46 @@
 import { Box, Grid, GridItem } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import foodApi from '../../../../api/foodApi';
+import ComponentLoader from '../../../../global/components/ComponentLoader';
 import FoodCard from '../../../Food/components/FoodCard';
 
 const HomePage = () => {
    const [foodList, setFoodList] = useState([]);
-   console.log('🚀 ~ foodList', foodList);
+   const [loading, setLoading] = useState(true);
 
    useEffect(() => {
       const getFoodListInDb = async () => {
-         const foodResponse = await foodApi.getAllFood();
-         setFoodList(foodResponse);
+         try {
+            setLoading(true);
+            const foodResponse = await foodApi.getAllFood();
+            setFoodList(foodResponse);
+            setLoading(false);
+         } catch (error) {
+            console.log(error);
+            setLoading(false);
+         }
       };
       getFoodListInDb();
    }, []);
 
    return (
       <Box>
-         <Grid templateColumns='repeat(24, 1fr)' gap='6'>
-            {foodList?.map((food) => (
-               <GridItem colSpan={6} key={food.id}>
-                  <FoodCard
-                     photoURL={food.photoURL}
-                     name={food.name}
-                     description={food.description}
-                     price={food.price}
-                  />
-               </GridItem>
-            ))}
-         </Grid>
+         <ComponentLoader loading={loading}>
+            <Grid templateColumns='repeat(25, 1fr)' gap='6'>
+               {foodList?.map((food) => (
+                  <GridItem colSpan={5} key={food.id}>
+                     <FoodCard
+                        photoURL={food.photoURL}
+                        name={food.name}
+                        description={food.description}
+                        price={food.price}
+                        categoryName={food.category.name}
+                        foodDetail={food}
+                     />
+                  </GridItem>
+               ))}
+            </Grid>
+         </ComponentLoader>
       </Box>
    );
 };

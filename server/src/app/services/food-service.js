@@ -3,7 +3,12 @@ const prisma = require('../models/prisma');
 const foodModel = prisma.food;
 
 const getFoodList = async () => {
-   const find = await foodModel.findMany();
+   const find = await foodModel.findMany({
+      include: {
+         user: true,
+         category: true,
+      },
+   });
    return find;
 };
 

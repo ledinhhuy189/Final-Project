@@ -25,9 +25,11 @@ import {
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { authData } from '../../../features/Auth/authSlice';
+import { cartData } from '../../../features/Cart/cartSlice';
 import logout from '../../../firebase/logout';
 import useUserLogged from '../../../hooks/useUserLogged';
 import Search from '../Search';
+import BadgeCount from '../BadgeCount';
 
 const subMenuStyle = {
    color: 'gray.500',
@@ -40,6 +42,7 @@ const subMenuStyle = {
 
 const Header = () => {
    const { userData } = useSelector(authData);
+   const cartDataList = useSelector(cartData);
 
    const userLogged = useUserLogged();
    const navigate = useNavigate();
@@ -82,7 +85,11 @@ const Header = () => {
                </GridItem>
                <GridItem colStart={16} colEnd={25}>
                   {userLogged ? (
-                     <UserLogin navigate={navigate} userData={userData} />
+                     <UserLogin
+                        navigate={navigate}
+                        userData={userData}
+                        cartDataList={cartDataList}
+                     />
                   ) : (
                      <UserNotLogin navigate={navigate} />
                   )}
@@ -94,7 +101,7 @@ const Header = () => {
 };
 
 const UserLogin = (props) => {
-   const { navigate, userData } = props;
+   const { navigate, userData, cartDataList } = props;
 
    const onClickProfile = () => {
       navigate(`/profile/${userData.email}`);
@@ -125,8 +132,10 @@ const UserLogin = (props) => {
             size='40px'
             cursor='pointer'
             onClick={() => navigate('/cart')}
+            position='relative'
          >
             <Icon as={BsBagFill} fontSize='md' color='green.600' />
+            <BadgeCount number={cartDataList?.length} />
          </Circle>
          <Menu isLazy>
             <MenuButton>
