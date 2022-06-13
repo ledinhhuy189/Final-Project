@@ -4,7 +4,9 @@ import { BsBagFill } from 'react-icons/bs';
 import priceFormat from '../../../../utils/priceFormat';
 import PropTypes from 'prop-types';
 import { cartActions } from '../../../Cart/cartSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import cartApi from '../../../../api/cartApi';
+import { authCartId } from '../../../Auth/authSlice';
 
 FoodCard.propTypes = {
    photoURL: PropTypes.string,
@@ -12,7 +14,7 @@ FoodCard.propTypes = {
    description: PropTypes.string,
    price: PropTypes.number,
    categoryName: PropTypes.string,
-   foodDetail: PropTypes.object,
+   foodId: PropTypes.number,
 };
 
 FoodCard.defaultProps = {
@@ -29,9 +31,10 @@ function FoodCard({
    description,
    price,
    categoryName,
-   foodDetail,
+   foodId,
 }) {
    const dispatch = useDispatch();
+   const cartId = useSelector(authCartId);
 
    const isCategoryColor = (categoryName) => {
       if (categoryName === 'Vegetable') return 'green';
@@ -39,9 +42,19 @@ function FoodCard({
       return 'gray';
    };
 
-   const handleClickCart = () => {
-      const addToCartAction = cartActions.addToCart(foodDetail);
-      dispatch(addToCartAction);
+   const handleClickCart = async () => {
+      try {
+         const upsertCartItemResponse = await cartApi.upsertCart({
+            cartId,
+            data: {
+               foodId,
+            },
+         });
+         const addToCartAction = cartActions.addToCart(upsertCartItemResponse);
+         dispatch(addToCartAction);
+      } catch (error) {
+         console.log(error);
+      }
    };
 
    return (

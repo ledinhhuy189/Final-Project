@@ -5,6 +5,7 @@ import {
    authData,
    userProfileLocal,
 } from '../../../features/Auth/authSlice';
+import { getUserCart } from '../../../features/Cart/cartSlice';
 import { auth } from '../../../firebase/initialize';
 
 function AuthUserSideEffect(props) {
@@ -15,8 +16,11 @@ function AuthUserSideEffect(props) {
       if (!userData.email || !userData.displayName) return;
       const getUserData = async () => {
          try {
-            const action = userProfileLocal();
-            dispatch(action);
+            const userAction = userProfileLocal();
+            dispatch(userAction);
+
+            const cartAction = getUserCart();
+            dispatch(cartAction);
          } catch (error) {
             console.log(error);
          }

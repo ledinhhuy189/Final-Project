@@ -62,7 +62,7 @@ model Food {
   description String?
   price       Float
   photoURL    String?
-  quantity    Int
+  stock       Int         @default(1)
   categoryId  Int?
   userId      String?
   category    Category?   @relation(fields: [categoryId], references: [id])
@@ -96,6 +96,7 @@ model CartItem {
   id        Int      @id @default(autoincrement())
   cartId    Int?
   foodId    Int?
+  quantity  Int      @default(1)
   cart      Cart?    @relation(fields: [cartId], references: [id])
   food      Food?    @relation(fields: [foodId], references: [id])
   createdAt DateTime @default(now())
@@ -118,6 +119,7 @@ model OrderItem {
   id        Int      @id @default(autoincrement())
   foodId    Int?
   orderId   Int?
+  quantity  Int      @default(1)
   food      Food?    @relation(fields: [foodId], references: [id])
   order     Order?   @relation(fields: [orderId], references: [id])
   createdAt DateTime @default(now())

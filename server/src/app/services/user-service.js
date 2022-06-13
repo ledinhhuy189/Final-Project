@@ -7,6 +7,13 @@ const findMe = async ({ email }) => {
       where: {
          email,
       },
+      include: {
+         cart: {
+            select: {
+               id: true,
+            },
+         },
+      },
    });
 
    return find;
@@ -37,6 +44,11 @@ const upsertUser = async ({ email, name, id, photoURL = null }) => {
          email,
          name,
          photoURL,
+         cart: {
+            create: {
+               createdAt: new Date(),
+            },
+         },
       },
    });
 

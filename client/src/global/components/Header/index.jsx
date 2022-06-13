@@ -14,7 +14,6 @@ import {
    MenuList,
    Text,
 } from '@chakra-ui/react';
-import React from 'react';
 import {
    BsBagFill,
    BsFillPersonFill,
@@ -25,11 +24,11 @@ import {
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { authData } from '../../../features/Auth/authSlice';
-import { cartData } from '../../../features/Cart/cartSlice';
+import { cartCount } from '../../../features/Cart/cartSlice';
 import logout from '../../../firebase/logout';
 import useUserLogged from '../../../hooks/useUserLogged';
-import Search from '../Search';
 import BadgeCount from '../BadgeCount';
+import Search from '../Search';
 
 const subMenuStyle = {
    color: 'gray.500',
@@ -42,7 +41,7 @@ const subMenuStyle = {
 
 const Header = () => {
    const { userData } = useSelector(authData);
-   const cartDataList = useSelector(cartData);
+   const count = useSelector(cartCount);
 
    const userLogged = useUserLogged();
    const navigate = useNavigate();
@@ -88,7 +87,7 @@ const Header = () => {
                      <UserLogin
                         navigate={navigate}
                         userData={userData}
-                        cartDataList={cartDataList}
+                        count={count}
                      />
                   ) : (
                      <UserNotLogin navigate={navigate} />
@@ -101,7 +100,7 @@ const Header = () => {
 };
 
 const UserLogin = (props) => {
-   const { navigate, userData, cartDataList } = props;
+   const { navigate, userData, count } = props;
 
    const onClickProfile = () => {
       navigate(`/profile/${userData.email}`);
@@ -135,7 +134,7 @@ const UserLogin = (props) => {
             position='relative'
          >
             <Icon as={BsBagFill} fontSize='md' color='green.600' />
-            <BadgeCount number={cartDataList?.length} />
+            {count > 0 && <BadgeCount number={count} />}
          </Circle>
          <Menu isLazy>
             <MenuButton>
