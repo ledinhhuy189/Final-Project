@@ -31,6 +31,13 @@ const cartSlice = createSlice({
 
          state.data[findItem].quantity += 1;
       },
+      removeFromCart: (state, action) => {
+         const findItem = state.data.findIndex(
+            (food) => food.id === action.payload.id
+         );
+
+         state.data[findItem].quantity -= 1;
+      },
    },
    extraReducers: {
       [getUserCart.pending]: (state) => {
@@ -59,13 +66,12 @@ const cartSlice = createSlice({
 export const cartActions = cartSlice.actions;
 
 // Selectors
+export const cartLoading = (state) => state.cart.loading;
 export const cartData = (state) => state.cart.data;
-export const cartCount = (state) => {
-   const count = state.cart.data?.reduce((acc, item) => {
+export const cartCount = (state) =>
+   state.cart.data?.reduce((acc, item) => {
       return (acc += Number(item.quantity));
    }, 0);
-   return count;
-};
 
 // Reducers
 const cartReducer = cartSlice.reducer;

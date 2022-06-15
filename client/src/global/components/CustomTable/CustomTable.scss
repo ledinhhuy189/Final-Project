@@ -1,0 +1,31 @@
+.custom-table {
+   table {
+      width: 100%;
+   }
+
+   tr {
+      border-bottom: 1px solid;
+      border-color: #edf2f7;
+   }
+
+   tr:last-child {
+      border-bottom: 0px solid;
+   }
+
+   .rc-table-cell {
+      text-align: left;
+      font-size: 18px;
+      padding: 10px 0px 10px 0px;
+   }
+
+   .rc-table-content {
+      padding: 20px 25px;
+      border-radius: 20px;
+   }
+}
+
+.disabled--thead {
+   .rc-table-thead {
+      display: none;
+   }
+}

@@ -17,6 +17,9 @@ const getCart = async (userId) => {
                   },
                },
             },
+            orderBy: {
+               createdAt: 'desc',
+            },
          },
       },
    });
@@ -24,6 +27,8 @@ const getCart = async (userId) => {
 };
 
 const upsertCart = async ({ cartItem, cartId }) => {
+   const upsertType = cartItem.type === 'decrease' ? -1 : 1;
+
    const findCartItem = await cartItemModel.findFirst({
       where: {
          AND: [
@@ -43,7 +48,7 @@ const upsertCart = async ({ cartItem, cartId }) => {
             id: findCartItem.id,
          },
          data: {
-            quantity: Number(findCartItem?.quantity) + 1,
+            quantity: Number(findCartItem?.quantity) + upsertType,
          },
          include: {
             food: {
