@@ -79,7 +79,24 @@ const upsertCart = async ({ cartItem, cartId }) => {
    return createCartItem;
 };
 
+const deleteCartItem = async (cartItemId) => {
+   const remove = await cartItemModel.delete({
+      where: {
+         id: Number(cartItemId),
+      },
+      include: {
+         food: {
+            include: {
+               user: true,
+            },
+         },
+      },
+   });
+   return remove;
+};
+
 module.exports = {
    getCart,
    upsertCart,
+   deleteCartItem,
 };

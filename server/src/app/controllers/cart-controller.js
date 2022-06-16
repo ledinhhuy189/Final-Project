@@ -22,7 +22,19 @@ const upsertCartInDb = async (req, res, next) => {
    }
 };
 
+const removeCartItemInDb = async (req, res, next) => {
+   try {
+      const removeResponse = await cartService.deleteCartItem(
+         req.params.cartItemId
+      );
+      return res.json(removeResponse);
+   } catch (error) {
+      return next(error);
+   }
+};
+
 module.exports = {
    getCartListInDb,
    upsertCartInDb,
+   removeCartItemInDb,
 };

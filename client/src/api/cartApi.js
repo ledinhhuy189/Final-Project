@@ -10,6 +10,11 @@ const cartApi = {
       const url = `/cart/${cartId}`;
       return axiosClient.patch(url, data);
    },
+
+   removeCartItem: (cartItemId) => {
+      const url = `/cart/${cartItemId}`;
+      return axiosClient.delete(url);
+   },
 };
 
 export default cartApi;

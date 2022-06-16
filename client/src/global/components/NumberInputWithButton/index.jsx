@@ -8,7 +8,6 @@ function NumberInputWithButton({ value, onClickIncrement, onClickDecrease }) {
          defaultValue: value,
          min: 1,
          max: 99,
-         precision: 0,
       });
 
    const inc = getIncrementButtonProps();
@@ -17,7 +16,7 @@ function NumberInputWithButton({ value, onClickIncrement, onClickDecrease }) {
 
    return (
       <HStack w='fit-content'>
-         <Button {...dec} onClick={onClickDecrease}>
+         <Button {...dec} onClick={onClickDecrease} disabled={value === 1}>
             -
          </Button>
          <Input {...input} textAlign='center' isReadOnly={true} />

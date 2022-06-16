@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Table from 'rc-table';
 import { Box } from '@chakra-ui/react';
 import './CustomTable.scss';
@@ -19,4 +19,4 @@ function CustomTable({ columns, data, disableThead }) {
    );
 }
 
-export default CustomTable;
+export default memo(CustomTable);

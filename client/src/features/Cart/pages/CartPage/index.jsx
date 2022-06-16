@@ -1,12 +1,24 @@
-import { Box, Button, Checkbox, Image, Text, VStack } from '@chakra-ui/react';
+import {
+   Box,
+   Button,
+   Checkbox,
+   Flex,
+   Icon,
+   Image,
+   Text,
+   VStack,
+} from '@chakra-ui/react';
 import { useEffect, useMemo, useState } from 'react';
+import { RiHomeSmileLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import cartApi from '../../../../api/cartApi';
+import CustomBreadcrumb from '../../../../global/components/CustomBreadcrumb';
 import CustomTable from '../../../../global/components/CustomTable';
 import NumberInputWithButton from '../../../../global/components/NumberInputWithButton';
 import priceFormat from '../../../../utils/priceFormat';
 import { authCartId } from '../../../Auth/authSlice';
 import { cartActions, cartData, cartLoading } from '../../cartSlice';
+import TempPriceCalculator from '../../components/TempPriceCalculator';
 
 function CartPage(props) {
    const dispatch = useDispatch();
@@ -16,6 +28,7 @@ function CartPage(props) {
    const cartId = useSelector(authCartId);
 
    const [cartList, setCartList] = useState([]);
+   const [selectedItems, setSelectedItems] = useState([]);
 
    useEffect(() => {
       if (cartLoadingRedux) return;
@@ -25,14 +38,20 @@ function CartPage(props) {
          );
 
          if (findUser !== -1) {
-            acc[findUser].data.push({ ...item.food, quantity: item.quantity });
+            acc[findUser].data.push({
+               ...item.food,
+               quantity: item.quantity,
+               cartItemId: item.id,
+            });
             return acc;
          }
 
          acc.push({
             userId: item.food.userId,
             user: item.food.user,
-            data: [{ ...item.food, quantity: item.quantity }],
+            data: [
+               { ...item.food, quantity: item.quantity, cartItemId: item.id },
+            ],
          });
          return acc;
       }, []);
@@ -47,7 +66,7 @@ function CartPage(props) {
             dataIndex: 'id',
             width: '2%',
             render: (value, row) => {
-               return <Checkbox />;
+               return <Checkbox onChange={() => handleChangeCheckBox(row)} />;
             },
          },
          {
@@ -86,8 +105,8 @@ function CartPage(props) {
                return (
                   <NumberInputWithButton
                      value={value}
-                     onClickIncrement={() => handleClickIncrement(row)}
-                     onClickDecrease={() => handleClickDecrease(row)}
+                     onClickIncrement={() => handleClickIncrement(row.id)}
+                     onClickDecrease={() => handleClickDecrease(row.id)}
                   />
                );
             },
@@ -108,10 +127,18 @@ function CartPage(props) {
          {
             title: '',
             width: '10%',
-            dataIndex: 'id',
+            dataIndex: 'cartItemId',
             align: 'center',
             render: (value, row) => {
-               return <Button colorScheme='red'>Delete</Button>;
+               return (
+                  <Button
+                     colorScheme='red'
+                     variant='outline'
+                     onClick={() => handleRemoveCartItem(row.cartItemId)}
+                  >
+                     Delete
+                  </Button>
+               );
             },
          },
       ],
@@ -119,50 +146,122 @@ function CartPage(props) {
       []
    );
 
-   const handleClickIncrement = async (row) => {
-      const upsertCartItemResponse = await cartApi.upsertCart({
-         cartId,
-         data: {
-            foodId: row.id,
-         },
-      });
-      const addToCartAction = cartActions.addToCart(upsertCartItemResponse);
-      dispatch(addToCartAction);
+   const handleClickIncrement = async (foodId) => {
+      try {
+         const upsertCartItemResponse = await cartApi.upsertCart({
+            cartId,
+            data: {
+               foodId: foodId,
+            },
+         });
+
+         handleChangeQuantitySelected({
+            cartItemId: upsertCartItemResponse.id,
+            type: 'increase',
+         });
+
+         const addToCartAction = cartActions.addToCart(upsertCartItemResponse);
+         dispatch(addToCartAction);
+      } catch (error) {
+         console.log(error);
+      }
    };
 
-   const handleClickDecrease = async (row) => {
-      const upsertCartItemResponse = await cartApi.upsertCart({
-         cartId,
-         data: {
-            foodId: row.id,
+   const handleClickDecrease = async (foodId) => {
+      try {
+         const upsertCartItemResponse = await cartApi.upsertCart({
+            cartId,
+            data: {
+               foodId: foodId,
+               type: 'decrease',
+            },
+         });
+
+         handleChangeQuantitySelected({
+            cartItemId: upsertCartItemResponse.id,
             type: 'decrease',
-         },
+         });
+
+         const addToCartAction = cartActions.removeFromCart(
+            upsertCartItemResponse
+         );
+         dispatch(addToCartAction);
+      } catch (error) {
+         console.log(error);
+      }
+   };
+
+   const handleRemoveCartItem = async (cartItemId) => {
+      try {
+         const removeResponse = await cartApi.removeCartItem(cartItemId);
+
+         handleRemoveCartItemSelected(removeResponse.id);
+
+         const removeAction = cartActions.removeCartItem(removeResponse);
+         dispatch(removeAction);
+      } catch (error) {
+         console.log(error);
+      }
+   };
+
+   const handleChangeCheckBox = (cartItem) => {
+      setSelectedItems((prev) => {
+         if (prev.some((i) => i.id === cartItem.id)) {
+            return prev.filter((item) => item.id !== cartItem.id);
+         }
+
+         prev.push(cartItem);
+         return [...prev];
       });
-      const addToCartAction = cartActions.removeFromCart(
-         upsertCartItemResponse
-      );
-      dispatch(addToCartAction);
+   };
+
+   const handleChangeQuantitySelected = ({ cartItemId, type }) => {
+      setSelectedItems((prev) => {
+         const isType = type === 'decrease' ? -1 : 1;
+         const findIndex = prev.findIndex(
+            (item) => item.cartItemId === cartItemId
+         );
+         if (findIndex === -1) return prev;
+         prev[findIndex].quantity = prev[findIndex].quantity + isType;
+         return [...prev];
+      });
+   };
+
+   const handleRemoveCartItemSelected = (cartItemId) => {
+      setSelectedItems((prev) => {
+         return prev.filter((item) => item.cartItemId !== cartItemId);
+      });
    };
 
    return (
-      <VStack gap='2'>
-         {cartList?.map((cart) => (
-            <Box
-               w='full'
-               bg='white'
-               px='20px'
-               rounded='xl'
-               shadow='md'
-               key={cart.userId}
-            >
-               <CustomTable
-                  columns={columns}
-                  data={cart.data}
-                  disableThead={false}
-               />
-            </Box>
-         ))}
-      </VStack>
+      <>
+         <VStack gap='2' w='full' pt='6' pb='28'>
+            <Flex justifyContent='start' w='full'>
+               <CustomBreadcrumb />
+            </Flex>
+            {cartList?.map((cart) => (
+               <Box
+                  w='full'
+                  bg='white'
+                  px='20px'
+                  rounded='xl'
+                  shadow='md'
+                  key={cart.userId}
+               >
+                  <Flex px='4' pt='6' alignItems='center' gap='4'>
+                     <Icon as={RiHomeSmileLine} fontSize='xl' />
+                     <Text>{cart.user.email}</Text>
+                  </Flex>
+                  <CustomTable
+                     columns={columns}
+                     data={cart.data}
+                     disableThead={false}
+                  />
+               </Box>
+            ))}
+         </VStack>
+         <TempPriceCalculator selectedItems={selectedItems} />
+      </>
    );
 }
 

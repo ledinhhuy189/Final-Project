@@ -1,8 +1,7 @@
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@chakra-ui/react';
-import React from 'react';
-import useBreadcrumbs from 'use-react-router-breadcrumbs';
 import PropTypes from 'prop-types';
+import useBreadcrumbs from 'use-react-router-breadcrumbs';
 
 CustomBreadcrumb.propTypes = {
    email: PropTypes.string,

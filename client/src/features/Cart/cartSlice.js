@@ -31,12 +31,21 @@ const cartSlice = createSlice({
 
          state.data[findItem].quantity += 1;
       },
+
       removeFromCart: (state, action) => {
          const findItem = state.data.findIndex(
             (food) => food.id === action.payload.id
          );
 
          state.data[findItem].quantity -= 1;
+      },
+
+      removeCartItem: (state, action) => {
+         const filter = state.data.filter(
+            (item) => item.id !== action.payload.id
+         );
+         state.data.length = 0;
+         state.data = filter;
       },
    },
    extraReducers: {
