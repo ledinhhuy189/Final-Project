@@ -12,15 +12,24 @@ import {
 } from '@chakra-ui/react';
 import { BsCheckLg } from 'react-icons/bs';
 import priceFormat from '../../../../utils/priceFormat';
+import { useNavigate } from 'react-router-dom';
 
 TempPriceCalculator.propTypes = {
    selectedItems: PropTypes.array,
 };
 
 function TempPriceCalculator({ selectedItems }) {
+   const navigate = useNavigate();
+
    const calculatePrice = selectedItems.reduce((acc, i) => {
       return (acc += i.quantity * i.price);
    }, 0);
+
+   const onClickOrderNow = () => {
+      navigate('/order/make', {
+         state: selectedItems,
+      });
+   };
 
    return (
       <Box position='fixed' bottom='0px' left='0' w='full'>
@@ -47,7 +56,12 @@ function TempPriceCalculator({ selectedItems }) {
                      {priceFormat(calculatePrice)}
                   </Text>
                </HStack>
-               <Button colorScheme='green' leftIcon={<Icon as={BsCheckLg} />}>
+               <Button
+                  colorScheme='green'
+                  leftIcon={<Icon as={BsCheckLg} />}
+                  onClick={onClickOrderNow}
+                  disabled={Boolean(selectedItems.length === 0)}
+               >
                   Order Now
                </Button>
             </Flex>

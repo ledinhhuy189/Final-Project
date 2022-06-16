@@ -5,6 +5,7 @@ import Auth from '../features/Auth';
 import Cart from '../features/Cart';
 import Home from '../features/Home';
 import Message from '../features/Message';
+import Order from '../features/Order';
 import Profile from '../features/Profile';
 import Search from '../features/Search';
 import NotFoundPage from '../global/pages/NotFoundPage';
@@ -23,6 +24,7 @@ const Routers = () => {
                   <Route path='/search/*' element={<Search />} />
                </Route>
                <Route element={<Private />}>
+                  <Route path='/order/*' element={<Order />} />
                   <Route path='/profile/*' element={<Profile />} />
                   <Route path='/cart/*' element={<Cart />} />
                   <Route path='/message/*' element={<Message />} />

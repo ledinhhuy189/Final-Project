@@ -11,6 +11,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import { RiHomeSmileLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import cartApi from '../../../../api/cartApi';
 import CustomBreadcrumb from '../../../../global/components/CustomBreadcrumb';
 import CustomTable from '../../../../global/components/CustomTable';
@@ -22,6 +23,7 @@ import TempPriceCalculator from '../../components/TempPriceCalculator';
 
 function CartPage(props) {
    const dispatch = useDispatch();
+   const navigate = useNavigate();
 
    const cartDataRedux = useSelector(cartData);
    const cartLoadingRedux = useSelector(cartLoading);
@@ -66,7 +68,12 @@ function CartPage(props) {
             dataIndex: 'id',
             width: '2%',
             render: (value, row) => {
-               return <Checkbox onChange={() => handleChangeCheckBox(row)} />;
+               return (
+                  <Checkbox
+                     onChange={() => handleChangeCheckBox(row)}
+                     size='lg'
+                  />
+               );
             },
          },
          {
@@ -249,8 +256,18 @@ function CartPage(props) {
                   key={cart.userId}
                >
                   <Flex px='4' pt='6' alignItems='center' gap='4'>
-                     <Icon as={RiHomeSmileLine} fontSize='xl' />
-                     <Text>{cart.user.email}</Text>
+                     <Icon
+                        as={RiHomeSmileLine}
+                        fontSize='xl'
+                        cursor='pointer'
+                        onClick={() => navigate(`/profile/${cart.user.email}`)}
+                     />
+                     <Text
+                        cursor='pointer'
+                        onClick={() => navigate(`/profile/${cart.user.email}`)}
+                     >
+                        {cart.user.email}
+                     </Text>
                   </Flex>
                   <CustomTable
                      columns={columns}
