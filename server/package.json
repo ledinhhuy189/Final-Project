@@ -5,7 +5,7 @@
    "main": "src/index.js",
    "prisma": {
       "schema": "src/app/models/schema.prisma",
-      "seed": "node src/app/models/seed.js"
+      "seed": "node src/app/seeds/index.js"
    },
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
