@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import InformationInput from './InformationInput';
 
-function InformationForm(props) {
+function InformationForm({ handleMakeOrder }) {
    const navigate = useNavigate();
 
    const initialValues = {
@@ -33,14 +33,14 @@ function InformationForm(props) {
       district: Yup.string().required(),
       ward: Yup.string().required(),
       city: Yup.string().required(),
-      phoneNumber: Yup.string().required(),
+      phoneNumber: Yup.string(),
    });
 
    const onSubmit = (formData) => {
-      console.log('🚀 ~ formData', formData);
+      handleMakeOrder(formData);
    };
 
-   const onCancel = (formData) => {
+   const onCancel = () => {
       navigate(-1);
    };
 
