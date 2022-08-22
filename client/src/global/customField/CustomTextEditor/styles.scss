@@ -1,0 +1,25 @@
+.customField__textEditor {
+  .quill {
+    .ql-toolbar {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      border-color: #e2e8f0;
+    }
+
+    .ql-container {
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      border-color: #e2e8f0;
+
+      font-size: 16px;
+      font-style: normal;
+      color: #1a202c;
+
+      .ql-editor.ql-blank::before {
+        font-size: 16px;
+        font-style: normal;
+        color: #718096;
+      }
+    }
+  }
+}

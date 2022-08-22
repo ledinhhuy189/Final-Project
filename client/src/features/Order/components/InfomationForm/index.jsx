@@ -13,6 +13,9 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import InformationInput from './InformationInput';
 
+const PHONE_REGEX =
+   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
 function InformationForm({ handleMakeOrder }) {
    const navigate = useNavigate();
 
@@ -33,7 +36,10 @@ function InformationForm({ handleMakeOrder }) {
       district: Yup.string().required(),
       ward: Yup.string().required(),
       city: Yup.string().required(),
-      phoneNumber: Yup.string(),
+      phoneNumber: Yup.string().matches(
+         PHONE_REGEX,
+         'Phone number is not valid'
+      ),
    });
 
    const onSubmit = (formData) => {
@@ -101,6 +107,12 @@ function InformationForm({ handleMakeOrder }) {
                            component={InformationInput}
                         />
                      </HStack>
+                     <FastField
+                        name='phoneNumber'
+                        placeholder='Enter your phone'
+                        label='Phone'
+                        component={InformationInput}
+                     />
                      <HStack w='full' pt='4'>
                         <Button
                            colorScheme='green'

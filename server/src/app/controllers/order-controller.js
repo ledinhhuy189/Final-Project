@@ -11,13 +11,7 @@ const createOrder = async (req, res, next) => {
          buyer: userInfo,
       });
 
-      return res.json(
-         response
-         //   {
-         //    responseData: response,
-         //    message: 'create_order_success',
-         // }
-      );
+      return res.json(response);
    } catch (error) {
       return next(error);
    }

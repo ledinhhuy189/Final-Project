@@ -8,6 +8,7 @@ import Message from '../features/Message';
 import Order from '../features/Order';
 import Profile from '../features/Profile';
 import Search from '../features/Search';
+import Food from '../features/Food';
 import NotFoundPage from '../global/pages/NotFoundPage';
 import Loader from '../layouts/Loader';
 import Main from '../layouts/Main';
@@ -24,6 +25,7 @@ const Routers = () => {
                   <Route path='/search/*' element={<Search />} />
                </Route>
                <Route element={<Private />}>
+                  <Route path='/food/*' element={<Food />} />
                   <Route path='/order/*' element={<Order />} />
                   <Route path='/profile/*' element={<Profile />} />
                   <Route path='/cart/*' element={<Cart />} />
