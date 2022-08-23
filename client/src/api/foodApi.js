@@ -10,6 +10,11 @@ const foodApi = {
       const url = `/food/${slug}`;
       return axiosClient.get(url);
    },
+
+   createFood: (data) => {
+      const url = '/food';
+      return axiosClient.post(url, data);
+   },
 };
 
 export default foodApi;

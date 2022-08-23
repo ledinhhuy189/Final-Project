@@ -38,7 +38,7 @@ const CreateFoodDescription = () => {
                         placeholder='Enter your description'
                         label='Description'
                         component={CustomTextEditor}
-                        textHelper='Eiusmod officia adipisicing aute sint velit veniam ea cupidatat ad non.'
+                        textHelper='Cupidatat excepteur amet cillum labore aliqua voluptate.'
                      />
                   </VStack>
                </Box>

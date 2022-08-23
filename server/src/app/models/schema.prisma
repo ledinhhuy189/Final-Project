@@ -62,7 +62,7 @@ model Food {
   name        String
   description String?
   price       Float
-  photoURL    String?
+  photoURL    String[]
   stock       Int         @default(1)
   categoryId  Int?
   userId      String?

@@ -1,13 +1,67 @@
-import { Box, Grid, GridItem, Heading, Input, Text } from '@chakra-ui/react';
-import React, { useCallback } from 'react';
+import {
+   Box,
+   Flex,
+   Grid,
+   GridItem,
+   Heading,
+   Icon,
+   Image,
+   Input,
+   Text,
+   useToast,
+} from '@chakra-ui/react';
+import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { BsFillXCircleFill } from 'react-icons/bs';
+import { v4 as uuidv4 } from 'uuid';
+import { useFormikContext } from 'formik';
+import { useEffect } from 'react';
+
+const ACCEPT_FILE_TYPE = ['image/jpg', 'image/png', 'image/jpeg'];
 
 const CreateFoodImage = () => {
-   const onDrop = useCallback((acceptedFiles) => {
-      // Do something with the files
+   const toast = useToast();
+
+   // Formik in features/Food/CreateFood component
+   const { setFieldValue, errors, touched, setFieldTouched, isSubmitting } =
+      useFormikContext();
+
+   const [previewImageList, setPreviewImageList] = useState([]);
+
+   const onDrop = useCallback((file) => {
+      if (!ACCEPT_FILE_TYPE.includes(file[0].type))
+         return toast({
+            title: 'Only accept .jpg, .jpeg, and .png',
+            status: 'error',
+            position: 'top-right',
+         });
+
+      const fileWithPreview = Object.assign(file[0], {
+         id: uuidv4(),
+         preview: URL.createObjectURL(file[0]),
+      });
+
+      setPreviewImageList((prev) => [...prev, fileWithPreview]);
+      //eslint-disable-next-line
    }, []);
+
+   useEffect(() => {
+      setFieldValue('images', previewImageList);
+   }, [previewImageList]);
+
+   const onClickDeleteImage = (imageId) => {
+      setPreviewImageList((prev) => {
+         const foundDeleteImageIndex = prev.findIndex((i) => i.id === imageId);
+         if (foundDeleteImageIndex === -1) return prev;
+
+         return prev.splice(foundDeleteImageIndex, 1);
+      });
+   };
+
    const { getRootProps, getInputProps, isDragActive } = useDropzone({
       onDrop,
+      multiple: false,
+      disabled: isSubmitting,
    });
 
    return (
@@ -28,8 +82,9 @@ const CreateFoodImage = () => {
                py='7'
                bg='white'
                rounded='xl'
-               border='1px'
+               border='2px'
                borderColor='gray.100'
+               borderStyle='dashed'
             >
                <Box
                   {...getRootProps()}
@@ -38,7 +93,11 @@ const CreateFoodImage = () => {
                   justifyContent='center'
                   minH='36'
                >
-                  <Input {...getInputProps()} />
+                  <Input
+                     {...getInputProps()}
+                     multiple={false}
+                     onBlur={() => setFieldTouched('images')}
+                  />
                   {isDragActive ? (
                      <p>Drop the files here ...</p>
                   ) : (
@@ -48,6 +107,40 @@ const CreateFoodImage = () => {
                      </p>
                   )}
                </Box>
+               {touched?.images && errors?.images && (
+                  <Text fontSize='14px' color='red.500'>
+                     {errors?.images}
+                  </Text>
+               )}
+
+               <Flex gap='6'>
+                  {previewImageList?.map((image) => (
+                     <Box
+                        key={image.id}
+                        position='relative'
+                        rounded='xl'
+                        cursor='pointer'
+                        maxW='44'
+                     >
+                        <Icon
+                           as={BsFillXCircleFill}
+                           position='absolute'
+                           fontSize='20'
+                           top='3'
+                           right='3'
+                           color='white'
+                           display='block'
+                           zIndex='10'
+                           onClick={() => onClickDeleteImage(image.id)}
+                        />
+                        <Image
+                           src={image.preview}
+                           objectFit='cover'
+                           rounded='xl'
+                        />
+                     </Box>
+                  ))}
+               </Flex>
             </Box>
          </GridItem>
       </Grid>

@@ -30,7 +30,7 @@ const HomePage = () => {
                {foodList?.map((food) => (
                   <GridItem colSpan={5} key={food.id}>
                      <FoodCard
-                        photoURL={food.photoURL}
+                        photoURL={food.photoURL[0]}
                         name={food.name}
                         description={food.description}
                         price={food.price}

@@ -1,10 +1,16 @@
 import { Box, Grid, GridItem, Heading, Text, VStack } from '@chakra-ui/react';
 import { FastField } from 'formik';
 import React from 'react';
+import CATEGORY from '../../../../constants/category';
 import CustomInput from '../../../../global/customField/CustomInput';
 import CustomSelect from '../../../../global/customField/CustomSelect';
 
 const CreateFoodOverview = (props) => {
+   const categorySelectList = CATEGORY.map((c) => ({
+      label: c.name,
+      value: c.id,
+   }));
+
    return (
       <Grid templateColumns='repeat(4, 1fr)' gap={12} w='full'>
          <GridItem colSpan='1'>
@@ -40,17 +46,21 @@ const CreateFoodOverview = (props) => {
                         type='number'
                         component={CustomInput}
                      />
+
+                     <FastField
+                        name='stock'
+                        placeholder='Enter your Stock'
+                        label='Stock'
+                        type='number'
+                        component={CustomInput}
+                     />
+
                      <FastField
                         name='category'
                         placeholder='Enter your Category'
                         label='Category'
                         component={CustomSelect}
-                     />
-                     <FastField
-                        name='address'
-                        placeholder='Enter your Food name'
-                        label='Address'
-                        component={CustomInput}
+                        optionList={categorySelectList}
                      />
                   </VStack>
                </Box>

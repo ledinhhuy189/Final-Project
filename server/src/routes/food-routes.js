@@ -4,6 +4,7 @@ const { foodController } = require('../app/controllers');
 const { tokenVerify } = require('../firebase');
 
 router.get('/:slug', tokenVerify, foodController.getFoodByIdInDb);
-router.get('/', tokenVerify, foodController.getFoodListInDb);
+router.post('/', tokenVerify, foodController.createFoodInDb);
+router.get('/', foodController.getFoodListInDb);
 
 module.exports = router;

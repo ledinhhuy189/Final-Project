@@ -5,8 +5,8 @@ import { auth } from '../firebase/initialize';
 const getFirebaseToken = async () => {
    const currentUser = auth.currentUser;
 
+   if (!localStorage.getItem('providerData')) return null;
    if (currentUser) return currentUser.getIdToken();
-   if (localStorage.getItem('providerData') === false) return null;
 
    return new Promise((resolve, reject) => {
       const waitTimer = setTimeout(() => {

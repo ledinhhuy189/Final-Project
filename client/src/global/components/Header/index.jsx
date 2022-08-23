@@ -109,7 +109,8 @@ const UserLogin = (props) => {
    const onClickLogout = async () => {
       const logoutResponse = await logout();
       if (logoutResponse.message === 'logout_success') {
-         localStorage.setItem('providerData', false);
+         localStorage.removeItem('providerData');
+
          return (window.location = '/home');
       }
    };
