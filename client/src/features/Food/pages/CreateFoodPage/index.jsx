@@ -22,7 +22,7 @@ import CreateFoodOverview from '../../components/CreateFoodOverview';
 import { uploadFile } from '../../../../firebase';
 import foodApi from '../../../../api/foodApi';
 
-const CreateFood = () => {
+const CreateFoodPage = () => {
    const toast = useToast();
    const navigate = useNavigate();
    const {
@@ -47,7 +47,7 @@ const CreateFood = () => {
 
       description: Yup.string().required(),
       shortDescription: Yup.string().required(),
-      images: Yup.array().required().min(1).max(5),
+      images: Yup.array().required().min(1).max(4),
    });
 
    const onSubmit = async (formValue) => {
@@ -137,4 +137,4 @@ const CreateFood = () => {
    );
 };
 
-export default CreateFood;
+export default CreateFoodPage;

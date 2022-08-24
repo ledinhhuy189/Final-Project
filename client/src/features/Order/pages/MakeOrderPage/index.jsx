@@ -1,5 +1,5 @@
 import { Box, Flex, useToast } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import orderApi from '../../../../api/orderApi';
 import CustomBreadcrumb from '../../../../global/components/CustomBreadcrumb';
 import InformationForm from '../../components/InfomationForm';
@@ -7,6 +7,7 @@ import YourOrder from '../../components/YourOrder';
 
 function OrderPage(props) {
    const toast = useToast();
+   const navigate = useNavigate();
    const { state: orderItemsData } = useLocation();
 
    const handleMakeOrder = async () => {
@@ -18,6 +19,8 @@ function OrderPage(props) {
                status: 'success',
                position: 'top-right',
             });
+
+            navigate('/notification/success');
          }
       } catch (error) {
          console.log(error);

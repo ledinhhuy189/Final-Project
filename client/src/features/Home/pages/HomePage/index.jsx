@@ -36,6 +36,7 @@ const HomePage = () => {
                         price={food.price}
                         categoryName={food.category.name}
                         foodId={food.id}
+                        foodSlug={food.slug}
                      />
                   </GridItem>
                ))}

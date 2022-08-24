@@ -13,29 +13,30 @@ import NotFoundPage from '../global/pages/NotFoundPage';
 import Loader from '../layouts/Loader';
 import Main from '../layouts/Main';
 import Private from '../layouts/Private';
+import Notification from '../features/Notification';
 
 const Routers = () => {
    return (
-      <>
-         <Loader>
-            <Routes>
-               <Route path='/auth/*' element={<Auth />} />
-               <Route element={<Main />}>
-                  <Route path='/home/*' element={<Home />} />
-                  <Route path='/search/*' element={<Search />} />
-               </Route>
-               <Route element={<Private />}>
-                  <Route path='/food/*' element={<Food />} />
-                  <Route path='/order/*' element={<Order />} />
-                  <Route path='/profile/*' element={<Profile />} />
-                  <Route path='/cart/*' element={<Cart />} />
-                  <Route path='/message/*' element={<Message />} />
-                  <Route path='/admin/*' element={<Admin />} />
-               </Route>
-               <Route path='*' element={<NotFoundPage />} />
-            </Routes>
-         </Loader>
-      </>
+      <Loader>
+         <Routes>
+            <Route path='/auth/*' element={<Auth />} />
+            <Route path='/notification/*' element={<Notification />} />
+
+            <Route element={<Main />}>
+               <Route path='/home/*' element={<Home />} />
+               <Route path='/search/*' element={<Search />} />
+            </Route>
+            <Route element={<Private />}>
+               <Route path='/food/*' element={<Food />} />
+               <Route path='/order/*' element={<Order />} />
+               <Route path='/profile/*' element={<Profile />} />
+               <Route path='/cart/*' element={<Cart />} />
+               <Route path='/message/*' element={<Message />} />
+               <Route path='/admin/*' element={<Admin />} />
+            </Route>
+            <Route path='*' element={<NotFoundPage />} />
+         </Routes>
+      </Loader>
    );
 };
 

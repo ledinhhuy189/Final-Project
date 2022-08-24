@@ -1,11 +1,13 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import CreateFood from './pages/CreateFood';
+import CreateFoodPage from './pages/CreateFoodPage';
+import FoodDetailPage from './pages/FoodDetailPage';
 
 function Order() {
    return (
       <Routes>
-         <Route path='/create' element={<CreateFood />} />
+         <Route path='/:foodSlug/detail' element={<FoodDetailPage />} />
+         <Route path='/create' element={<CreateFoodPage />} />
       </Routes>
    );
 }

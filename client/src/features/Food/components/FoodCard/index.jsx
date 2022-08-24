@@ -1,4 +1,13 @@
-import { Badge, Box, Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
+import {
+   Badge,
+   Box,
+   Button,
+   Flex,
+   Icon,
+   Image,
+   Link,
+   Text,
+} from '@chakra-ui/react';
 import React from 'react';
 import { BsBagFill } from 'react-icons/bs';
 import priceFormat from '../../../../utils/priceFormat';
@@ -7,6 +16,7 @@ import { cartActions } from '../../../Cart/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import cartApi from '../../../../api/cartApi';
 import { authCartId } from '../../../Auth/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 FoodCard.propTypes = {
    photoURL: PropTypes.string,
@@ -14,6 +24,7 @@ FoodCard.propTypes = {
    shortDescription: PropTypes.string,
    price: PropTypes.number,
    categoryName: PropTypes.string,
+   foodSlug: PropTypes.string,
    foodId: PropTypes.number,
 };
 
@@ -23,6 +34,7 @@ FoodCard.defaultProps = {
    shortDescription: '',
    price: 0,
    categoryName: '',
+   foodSlug: '',
 };
 
 function FoodCard({
@@ -32,7 +44,9 @@ function FoodCard({
    price,
    categoryName,
    foodId,
+   foodSlug,
 }) {
+   const navigate = useNavigate();
    const dispatch = useDispatch();
    const cartId = useSelector(authCartId);
 
@@ -40,6 +54,10 @@ function FoodCard({
       if (categoryName === 'Vegetable') return 'green';
       if (categoryName === 'Fruit') return 'orange';
       return 'gray';
+   };
+
+   const onNavigateToFoodDetail = () => {
+      navigate(`/food/${foodSlug}/detail`);
    };
 
    const handleClickCart = async () => {
@@ -81,7 +99,8 @@ function FoodCard({
                   {categoryName}
                </Badge>
 
-               <Text
+               <Link
+                  onClick={onNavigateToFoodDetail}
                   as='h1'
                   fontWeight='bold'
                   fontSize='lg'
@@ -90,7 +109,7 @@ function FoodCard({
                   mb='2'
                >
                   {name}
-               </Text>
+               </Link>
 
                <Text as='p' color='gray.500' noOfLines={2} fontSize='sm'>
                   {shortDescription}
@@ -100,7 +119,11 @@ function FoodCard({
                {priceFormat(price)}
             </Text>
             <Flex gap='3'>
-               <Button colorScheme='green' w='full'>
+               <Button
+                  colorScheme='green'
+                  w='full'
+                  onClick={onNavigateToFoodDetail}
+               >
                   Buy now
                </Button>
                <Button onClick={handleClickCart}>
