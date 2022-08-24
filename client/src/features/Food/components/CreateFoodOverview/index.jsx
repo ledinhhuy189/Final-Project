@@ -1,15 +1,30 @@
 import { Box, Grid, GridItem, Heading, Text, VStack } from '@chakra-ui/react';
 import { FastField } from 'formik';
-import React from 'react';
-import CATEGORY from '../../../../constants/category';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+import categoryApi from '../../../../api/categoryApi';
 import CustomInput from '../../../../global/customField/CustomInput';
 import CustomSelect from '../../../../global/customField/CustomSelect';
 
 const CreateFoodOverview = (props) => {
-   const categorySelectList = CATEGORY.map((c) => ({
-      label: c.name,
-      value: c.id,
-   }));
+   const [categoryList, setCategoryList] = useState([]);
+
+   useEffect(() => {
+      const getCategoryListInDb = async () => {
+         try {
+            const categoryResponse = await categoryApi.getCategory();
+            setCategoryList(
+               categoryResponse.map((category) => ({
+                  label: category.name,
+                  value: category.id,
+               }))
+            );
+         } catch (error) {
+            console.log(error);
+         }
+      };
+      getCategoryListInDb();
+   }, []);
 
    return (
       <Grid templateColumns='repeat(4, 1fr)' gap={12} w='full'>
@@ -55,13 +70,16 @@ const CreateFoodOverview = (props) => {
                         component={CustomInput}
                      />
 
-                     <FastField
-                        name='category'
-                        placeholder='Enter your Category'
-                        label='Category'
-                        component={CustomSelect}
-                        optionList={categorySelectList}
-                     />
+                     {categoryList.length > 0 && (
+                        <FastField
+                           name='category'
+                           placeholder='Enter your Category'
+                           label='Category'
+                           component={CustomSelect}
+                           optionList={categoryList}
+                           disabled={categoryList.length === 0}
+                        />
+                     )}
                   </VStack>
                </Box>
             </Box>

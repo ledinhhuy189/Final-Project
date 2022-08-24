@@ -28,7 +28,15 @@ const getFoodBySlug = async ({ slug }) => {
 };
 
 const createFood = async ({ foodFormData, userData }) => {
-   const { category, price, stock, description, name, photoURL } = foodFormData;
+   const {
+      category,
+      price,
+      stock,
+      description,
+      shortDescription,
+      name,
+      photoURL,
+   } = foodFormData;
 
    const create = await foodModel.create({
       data: {
@@ -36,9 +44,10 @@ const createFood = async ({ foodFormData, userData }) => {
          categoryId: Number(category),
          price: parseFloat(price),
          stock: Number(stock),
-         slug: `${name}-${uuidv4()}`,
+         slug: `${slugify(name)}-${uuidv4()}`,
 
          description,
+         shortDescription,
          name,
          photoURL,
       },

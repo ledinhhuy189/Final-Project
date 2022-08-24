@@ -4,8 +4,10 @@ const messageRouter = require('./message-routes');
 const foodRouter = require('./food-routes');
 const cartRouter = require('./cart-routes');
 const orderRouter = require('./order-routes');
+const categoryRouter = require('./category-routes');
 
 const route = (app) => {
+   app.use('/api/category', categoryRouter);
    app.use('/api/cart', cartRouter);
    app.use('/api/user', userRouter);
    app.use('/api/conversation', conversationRouter);

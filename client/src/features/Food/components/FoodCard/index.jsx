@@ -11,7 +11,7 @@ import { authCartId } from '../../../Auth/authSlice';
 FoodCard.propTypes = {
    photoURL: PropTypes.string,
    name: PropTypes.string,
-   description: PropTypes.string,
+   shortDescription: PropTypes.string,
    price: PropTypes.number,
    categoryName: PropTypes.string,
    foodId: PropTypes.number,
@@ -20,7 +20,7 @@ FoodCard.propTypes = {
 FoodCard.defaultProps = {
    photoURL: '',
    name: '',
-   description: '',
+   shortDescription: '',
    price: 0,
    categoryName: '',
 };
@@ -28,7 +28,7 @@ FoodCard.defaultProps = {
 function FoodCard({
    photoURL,
    name,
-   description,
+   shortDescription,
    price,
    categoryName,
    foodId,
@@ -93,7 +93,7 @@ function FoodCard({
                </Text>
 
                <Text as='p' color='gray.500' noOfLines={2} fontSize='sm'>
-                  {description}
+                  {shortDescription}
                </Text>
             </Box>
             <Text as='h2' fontSize='2xl' fontWeight='bold' mb='4'>

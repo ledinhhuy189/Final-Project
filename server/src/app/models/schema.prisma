@@ -57,22 +57,23 @@ model Message {
 }
 
 model Food {
-  id          Int         @id @default(autoincrement())
-  slug        String      @unique
-  name        String
-  description String?
-  price       Float
-  photoURL    String[]
-  stock       Int         @default(1)
-  categoryId  Int?
-  userId      String?
-  category    Category?   @relation(fields: [categoryId], references: [id])
-  user        User?       @relation(fields: [userId], references: [id])
-  cartItems   CartItem[]
-  orderItems  OrderItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  isDeleted   DateTime?
+  id               Int         @id @default(autoincrement())
+  slug             String      @unique
+  name             String
+  shortDescription String?
+  description      String?
+  price            Float
+  photoURL         String[]
+  stock            Int         @default(1)
+  categoryId       Int?
+  userId           String?
+  category         Category?   @relation(fields: [categoryId], references: [id])
+  user             User?       @relation(fields: [userId], references: [id])
+  cartItems        CartItem[]
+  orderItems       OrderItem[]
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  isDeleted        DateTime?
 }
 
 model Category {

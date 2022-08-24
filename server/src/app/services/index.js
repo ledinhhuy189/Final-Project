@@ -3,7 +3,8 @@ const conversationService = require('./conversation-service');
 const messageService = require('./message-service');
 const foodService = require('./food-service');
 const cartService = require('./cart-service');
-const orderService = require('./order-service.');
+const orderService = require('./order-service');
+const categoryService = require('./category-service');
 
 module.exports = {
    userService,
@@ -12,4 +13,5 @@ module.exports = {
    foodService,
    cartService,
    orderService,
+   categoryService,
 };

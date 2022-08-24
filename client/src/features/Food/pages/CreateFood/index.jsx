@@ -1,8 +1,16 @@
-import { Box, Button, Grid, GridItem, VStack } from '@chakra-ui/react';
+import {
+   Box,
+   Button,
+   Grid,
+   GridItem,
+   useToast,
+   VStack,
+} from '@chakra-ui/react';
 import { Formik } from 'formik';
 import React from 'react';
 import { BsFillCartFill } from 'react-icons/bs';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { authData } from '../../../Auth/authSlice';
@@ -15,6 +23,8 @@ import { uploadFile } from '../../../../firebase';
 import foodApi from '../../../../api/foodApi';
 
 const CreateFood = () => {
+   const toast = useToast();
+   const navigate = useNavigate();
    const {
       userData: { email },
    } = useSelector(authData);
@@ -41,7 +51,6 @@ const CreateFood = () => {
    });
 
    const onSubmit = async (formValue) => {
-      console.log('🚀 ~ formValue', formValue);
       try {
          const { foodName, images } = formValue;
 
@@ -64,12 +73,24 @@ const CreateFood = () => {
          };
 
          delete formatFormData.images;
-         console.log('🚀 ~ formatFormData', formatFormData);
 
          const createFoodResponse = await foodApi.createFood(formatFormData);
-         console.log('🚀 ~ createFoodResponse', createFoodResponse);
+
+         if (createFoodResponse) {
+            toast({
+               title: 'Create food success. Thank you!',
+               status: 'success',
+               position: 'top-right',
+            });
+
+            navigate('/home');
+         }
       } catch (error) {
-         console.log(error);
+         toast({
+            title: 'Something when wrong!',
+            status: 'error',
+            position: 'top-right',
+         });
       }
    };
 

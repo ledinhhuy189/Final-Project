@@ -82,7 +82,7 @@ function CartPage(props) {
             align: 'center',
             dataIndex: ['photoURL'],
             render: (value) => {
-               return <Image src={value} px='30px' />;
+               return <Image src={value[0]} px='30px' objectFit='cover' />;
             },
          },
          {

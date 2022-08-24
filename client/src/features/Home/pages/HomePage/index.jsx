@@ -32,7 +32,7 @@ const HomePage = () => {
                      <FoodCard
                         photoURL={food.photoURL[0]}
                         name={food.name}
-                        description={food.description}
+                        shortDescription={food.shortDescription}
                         price={food.price}
                         categoryName={food.category.name}
                         foodId={food.id}

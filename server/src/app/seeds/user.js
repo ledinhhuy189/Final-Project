@@ -2,17 +2,7 @@ const prisma = require('../models/prisma');
 
 const USER_SEED_DATA = [
    {
-      id: 'gqV5SB5htHUztnoUIdDX2qhNgtt1',
-      email: 'test2@gmail.com',
-      name: 'Test 2',
-      photoURL:
-         'https://www.shareicon.net/data/512x512/2015/09/18/103160_man_512x512.png',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      isDeleted: null,
-   },
-   {
-      id: 'IUAh502XkVV9NHPk9dSLVC49HlS2',
+      id: 'DPDikOoqdDN65shE7d66Wwn2bjy2',
       email: 'test1@gmail.com',
       name: 'Test 1',
       photoURL:
@@ -20,6 +10,18 @@ const USER_SEED_DATA = [
       createdAt: new Date(),
       updatedAt: new Date(),
       isDeleted: null,
+      phoneNumber: '0923645573',
+   },
+   {
+      id: 'jli6FN16VgO3a1jKQRnfqe98qSn1',
+      email: 'test2@gmail.com',
+      name: 'Test 2',
+      photoURL:
+         'https://www.shareicon.net/data/512x512/2015/09/18/103160_man_512x512.png',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isDeleted: null,
+      phoneNumber: '09232172384',
    },
 ];
 
@@ -29,8 +31,23 @@ const userSeeder = async () => {
          where: {
             id: element.id,
          },
-         create: element,
-         update: element,
+         create: {
+            ...element,
+            cart: {
+               create: {
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+               },
+            },
+         },
+         update: {
+            cart: {
+               create: {
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+               },
+            },
+         },
       });
    });
 };
