@@ -12,7 +12,9 @@ const getFoodListInDb = async (req, res, next) => {
 
 const getFoodByIdInDb = async (req, res, next) => {
    try {
-      const foodResponse = await foodService.getFoodBySlug(req.params.slug);
+      const { slug } = req.params;
+
+      const foodResponse = await foodService.getFoodBySlug({ slug });
 
       return res.json(foodResponse);
    } catch (error) {
@@ -35,8 +37,23 @@ const createFoodInDb = async (req, res, next) => {
    }
 };
 
+const getFoodOfUserInDb = async (req, res, next) => {
+   try {
+      const userData = req.getUserInfoByToken;
+
+      const myFoodResponse = await foodService.getFoodOfUser({
+         uid: userData.uid,
+      });
+
+      return res.json(myFoodResponse);
+   } catch (error) {
+      return next(error);
+   }
+};
+
 module.exports = {
    getFoodListInDb,
    getFoodByIdInDb,
    createFoodInDb,
+   getFoodOfUserInDb,
 };

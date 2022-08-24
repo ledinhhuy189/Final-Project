@@ -1,13 +1,5 @@
-import {
-   Box,
-   Button,
-   Center,
-   Flex,
-   Heading,
-   Icon,
-   Text,
-} from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
+import { Button, Center, Flex, Heading, Icon, Text } from '@chakra-ui/react';
 import React from 'react';
 import { BsEmojiHeartEyesFill } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';

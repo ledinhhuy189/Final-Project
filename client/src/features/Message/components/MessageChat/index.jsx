@@ -50,9 +50,10 @@ function MessageChat(props) {
    }, [messageList]);
 
    useEffect(() => {
-      setLoading(true);
       const getMessageInDb = async () => {
          try {
+            setLoading(true);
+
             const messageResponse =
                await conversationApi.getMessageInConversations(conversationId);
 
@@ -62,6 +63,7 @@ function MessageChat(props) {
                   (member) => member.user.id !== userId
                ).user
             );
+
             setLoading(false);
          } catch (error) {
             console.log(error);

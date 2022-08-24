@@ -36,7 +36,7 @@ function YourOrder({ orderItemsData }) {
             {orderItemsData?.map((item) => (
                <HStack w='full' gap='6' key={item.id}>
                   <Box flex='1'>
-                     <Image src={item.photoURL} />
+                     <Image src={item.photoURL[0]} />
                   </Box>
                   <Box flex='3'>
                      <Text as='h2' fontWeight='bold' fontSize='lg'>

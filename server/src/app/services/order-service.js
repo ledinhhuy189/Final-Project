@@ -1,6 +1,8 @@
 const prisma = require('../models/prisma');
 
 const orderModel = prisma.order;
+const cartItemModel = prisma.cartItem;
+const cartModel = prisma.cart;
 
 const createOrder = async (orderFormData) => {
    const {
@@ -43,12 +45,33 @@ const createOrder = async (orderFormData) => {
                },
             },
          },
+         include: {
+            orderItems: true,
+         },
       });
 
       return create;
    });
 
    const promiseResult = await Promise.all(createOrderByShop);
+
+   const getCartIdOfUser = await cartModel.findUnique({
+      where: {
+         userId: buyer.uid,
+      },
+      select: {
+         id: true,
+      },
+   });
+
+   promiseResult[0].orderItems.map(async (foodItem) => {
+      await cartItemModel.deleteMany({
+         where: {
+            cartId: Number(getCartIdOfUser.id),
+            foodId: Number(foodItem.foodId),
+         },
+      });
+   });
 
    return promiseResult;
 };

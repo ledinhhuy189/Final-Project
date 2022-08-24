@@ -1,11 +1,17 @@
 import { Box, Flex, useToast } from '@chakra-ui/react';
+import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import orderApi from '../../../../api/orderApi';
+
+import { getUserCart } from '../../../Cart/cartSlice';
+
 import CustomBreadcrumb from '../../../../global/components/CustomBreadcrumb';
 import InformationForm from '../../components/InfomationForm';
 import YourOrder from '../../components/YourOrder';
 
 function OrderPage(props) {
+   const dispatch = useDispatch();
    const toast = useToast();
    const navigate = useNavigate();
    const { state: orderItemsData } = useLocation();
@@ -19,6 +25,9 @@ function OrderPage(props) {
                status: 'success',
                position: 'top-right',
             });
+
+            const cartAction = getUserCart();
+            dispatch(cartAction);
 
             navigate('/notification/success');
          }

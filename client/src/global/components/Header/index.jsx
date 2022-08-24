@@ -70,7 +70,7 @@ const Header = () => {
                         cursor='pointer'
                         color='green.600'
                      >
-                        Foody
+                        Greenfood
                      </Text>
                      <Text
                         {...subMenuStyle}

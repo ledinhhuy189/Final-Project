@@ -4,6 +4,19 @@ const { v4: uuidv4 } = require('uuid');
 
 const foodModel = prisma.food;
 
+const getFoodOfUser = async ({ uid }) => {
+   const find = await foodModel.findMany({
+      where: {
+         userId: uid,
+      },
+      include: {
+         user: true,
+         category: true,
+      },
+   });
+   return find;
+};
+
 const getFoodList = async () => {
    const find = await foodModel.findMany({
       include: {
@@ -60,4 +73,5 @@ module.exports = {
    getFoodList,
    getFoodBySlug,
    createFood,
+   getFoodOfUser,
 };

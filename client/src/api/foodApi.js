@@ -6,7 +6,12 @@ const foodApi = {
       return axiosClient.get(url);
    },
 
-   getFoodById: (slug) => {
+   getFoodOfUser: () => {
+      const url = '/food/my';
+      return axiosClient.get(url);
+   },
+
+   getFoodBySlug: (slug) => {
       const url = `/food/${slug}`;
       return axiosClient.get(url);
    },

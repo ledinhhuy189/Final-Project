@@ -3,6 +3,7 @@ const router = express.Router();
 const { foodController } = require('../app/controllers');
 const { tokenVerify } = require('../firebase');
 
+router.get('/my', tokenVerify, foodController.getFoodOfUserInDb);
 router.get('/:slug', tokenVerify, foodController.getFoodByIdInDb);
 router.post('/', tokenVerify, foodController.createFoodInDb);
 router.get('/', foodController.getFoodListInDb);
