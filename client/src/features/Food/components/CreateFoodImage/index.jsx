@@ -47,7 +47,7 @@ const CreateFoodImage = () => {
 
    useEffect(() => {
       setFieldValue('images', previewImageList);
-   }, [previewImageList]);
+   }, [previewImageList, setFieldValue]);
 
    const onClickDeleteImage = (imageId) => {
       setPreviewImageList((prev) => {
