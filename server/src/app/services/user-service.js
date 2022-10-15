@@ -29,27 +29,36 @@ const findUser = async ({ email }) => {
    return find;
 };
 
-const upsertUser = async ({ email, name, id, photoURL = null }) => {
+const upsertUser = async ({
+   email,
+   name,
+   id,
+   photoURL = null,
+   isDeleted = null,
+}) => {
+   const updatePayload = { email, name, photoURL };
+   const createPayload = {
+      id,
+      email,
+      name,
+      photoURL,
+      cart: {
+         create: {
+            createdAt: new Date(),
+         },
+      },
+   };
+
+   if (isDeleted) {
+      updatePayload.isDeleted = isDeleted;
+   }
+
    const create = await userModel.upsert({
       where: {
          id,
       },
-      update: {
-         email,
-         name,
-         photoURL,
-      },
-      create: {
-         id,
-         email,
-         name,
-         photoURL,
-         cart: {
-            create: {
-               createdAt: new Date(),
-            },
-         },
-      },
+      update: updatePayload,
+      create: createPayload,
    });
 
    return create;

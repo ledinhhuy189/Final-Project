@@ -6,9 +6,9 @@ const conversationSeeder = require('./conversation');
 const loader = async () => {
    try {
       await userSeeder();
+      await categorySeeder();
       await orderStatusSeeder();
       await conversationSeeder();
-      await categorySeeder();
    } catch (error) {
       return error;
    }
