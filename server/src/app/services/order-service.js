@@ -102,10 +102,11 @@ const createOrder = async (orderFormData) => {
    return promiseResult;
 };
 
-const getOrderOfUser = async ({ uid }) => {
+const getOrderOfUser = async ({ uid, orderStatusId, createdAtDirection }) => {
    const find = await orderModel.findMany({
       where: {
          userId: uid,
+         orderStatusId: orderStatusId ? Number(orderStatusId) : undefined,
       },
       include: {
          orderItems: {
@@ -118,6 +119,9 @@ const getOrderOfUser = async ({ uid }) => {
             },
          },
          orderStatus: true,
+      },
+      orderBy: {
+         createdAt: createdAtDirection || 'desc',
       },
    });
 

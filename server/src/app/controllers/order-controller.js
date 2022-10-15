@@ -18,9 +18,12 @@ const createOrder = async (req, res, next) => {
 const findOrderOfUserInDb = async (req, res, next) => {
    try {
       const userInfo = req.getUserInfoByToken;
+      const { orderStatusId, createdAtDirection } = req.query;
 
       const orderOfUserResponse = await orderService.getOrderOfUser({
          uid: userInfo.uid,
+         orderStatusId,
+         createdAtDirection,
       });
 
       return res.json(orderOfUserResponse);
