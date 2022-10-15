@@ -5,15 +5,22 @@ import MessageToastReceiveSideEffect from './global/sideEffectComponent/MessageT
 import WebSocketSideEffect from './global/sideEffectComponent/WebSocketSideEffect';
 import Routers from './routers';
 import theme from './theme';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient();
 
 function App() {
    return (
-      <ChakraProvider theme={theme}>
-         <AuthUserSideEffect />
-         <WebSocketSideEffect />
-         <MessageToastReceiveSideEffect />
-         <Routers />
-      </ChakraProvider>
+      <QueryClientProvider client={queryClient}>
+         <ChakraProvider theme={theme}>
+            <AuthUserSideEffect />
+            <WebSocketSideEffect />
+            <MessageToastReceiveSideEffect />
+            <Routers />
+         </ChakraProvider>
+         <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
    );
 }
 

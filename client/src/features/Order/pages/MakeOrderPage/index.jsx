@@ -19,18 +19,27 @@ function OrderPage(props) {
    const handleMakeOrder = async () => {
       try {
          const makeOrderResponse = await orderApi.makeOrder({ orderItemsData });
-         if (makeOrderResponse) {
+
+         if (makeOrderResponse.message === 'user_is_owner_of_food') {
             toast({
-               title: 'Make order success. Thank you!',
-               status: 'success',
+               title: 'User is owner of this food! Can not make order',
+               status: 'error',
                position: 'top-right',
             });
 
-            const cartAction = getUserCart();
-            dispatch(cartAction);
-
-            navigate('/notification/success');
+            return;
          }
+
+         toast({
+            title: 'Make order success. Thank you!',
+            status: 'success',
+            position: 'top-right',
+         });
+
+         const cartAction = getUserCart();
+         dispatch(cartAction);
+
+         navigate('/notification/success');
       } catch (error) {
          console.log(error);
       }

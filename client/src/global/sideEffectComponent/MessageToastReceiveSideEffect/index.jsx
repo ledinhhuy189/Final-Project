@@ -12,7 +12,7 @@ import {
 function MessageToastReceiveSideEffect(props) {
    const dispatch = useDispatch();
    const toast = useToast();
-   let location = useLocation();
+   const location = useLocation();
 
    const incomingMessageRedux = useSelector(incomingMessage);
    const isSeenMessageRedux = useSelector(isSeenMessage);

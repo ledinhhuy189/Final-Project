@@ -10,6 +10,7 @@ import {
    Icon,
    Menu,
    MenuButton,
+   MenuDivider,
    MenuItem,
    MenuList,
    Text,
@@ -19,7 +20,9 @@ import {
    BsFillPersonFill,
    BsFillReplyFill,
    BsHeartFill,
+   BsPencilFill,
    BsPersonFill,
+   BsStack,
 } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -46,9 +49,7 @@ const Header = () => {
    const userLogged = useUserLogged();
    const navigate = useNavigate();
 
-   const onClickLogo = () => {
-      navigate('/home');
-   };
+   const onClickLogo = () => navigate('/home');
 
    return (
       <Center background='white' borderWidth='0px 0 2px 0' h='20'>
@@ -102,9 +103,9 @@ const Header = () => {
 const UserLogin = (props) => {
    const { navigate, userData, count } = props;
 
-   const onClickProfile = () => {
-      navigate(`/profile/${userData.email}`);
-   };
+   const onClickProfile = () => navigate(`/profile/${userData.email}`);
+   const onClickCreateFood = () => navigate('/food/create');
+   const onClickMyOrder = () => navigate('/order/user');
 
    const onClickLogout = async () => {
       const logoutResponse = await logout();
@@ -149,6 +150,18 @@ const UserLogin = (props) => {
                </Circle>
             </MenuButton>
             <MenuList>
+               <MenuItem icon={<Icon as={BsStack} />} onClick={onClickMyOrder}>
+                  My Order
+               </MenuItem>
+               <MenuDivider />
+
+               <MenuItem
+                  icon={<Icon as={BsPencilFill} />}
+                  onClick={onClickCreateFood}
+               >
+                  Create Food
+               </MenuItem>
+               <MenuDivider />
                <MenuItem
                   icon={<Icon as={BsPersonFill} />}
                   onClick={onClickProfile}
