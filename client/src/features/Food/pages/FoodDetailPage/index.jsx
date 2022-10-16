@@ -1,7 +1,7 @@
 import { Box, Grid, GridItem, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import cartApi from '../../../../api/cartApi';
 import foodApi from '../../../../api/foodApi';
@@ -17,8 +17,10 @@ import FoodDetailDescription from '../../components/FoodDetailDescription';
 import FoodDetailImage from '../../components/FoodDetailImage';
 import FoodDetailPrice from '../../components/FoodDetailPrice';
 import FoodDetailUser from '../../components/FoodDetailUser';
+import conversationApi from '../../../../api/conversationApi';
 
 const FoodDetailPage = () => {
+   const navigate = useNavigate();
    const toast = useToast();
    const dispatch = useDispatch();
    const { foodSlug } = useParams();
@@ -80,6 +82,18 @@ const FoodDetailPage = () => {
       }
    };
 
+   const handleClickSendMessageToShop = async () => {
+      try {
+         const response = await conversationApi.createConversation({
+            userId: foodDetail?.userId,
+         });
+
+         navigate(`/message/${response.conversationId}`);
+      } catch (error) {
+         console.log('🚀 ~ error', error);
+      }
+   };
+
    return (
       <PageSpinner isLoading={isFoodDetailLoading || !cartId}>
          <Box pt='4' pb='8'>
@@ -110,9 +124,11 @@ const FoodDetailPage = () => {
                <GridItem colSpan={1}>
                   <Box pb='3'>
                      <FoodDetailUser
+                        authorUserId={foodDetail?.userId}
                         authorUserPhotoURL={foodDetail?.user.photoURL}
                         authorUserEmail={foodDetail?.user.email}
                         authorUserName={foodDetail?.user.name}
+                        onClickSendMessageToShop={handleClickSendMessageToShop}
                      />
                   </Box>
                   <FoodDetailPrice

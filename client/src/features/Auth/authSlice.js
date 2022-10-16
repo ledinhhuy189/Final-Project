@@ -61,6 +61,7 @@ export const authActions = authSlice.actions;
 
 // Selectors
 export const authData = (state) => state.auth;
+export const authUserData = (state) => state.auth?.userData;
 export const authCartId = (state) => state.auth.userData.cart?.id;
 
 // Reducers

@@ -14,5 +14,6 @@ router.get(
    conversationController.findMessageInConversation
 );
 router.get('/', tokenVerify, conversationController.findConversationOfUser);
+router.post('/', tokenVerify, conversationController.createConversation);
 
 module.exports = router;

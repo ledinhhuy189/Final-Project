@@ -15,6 +15,11 @@ const conversationApi = {
       const url = '/conversation/search';
       return axiosClient.get(url, { params });
    },
+
+   createConversation: (data) => {
+      const url = '/conversation';
+      return axiosClient.post(url, data);
+   },
 };
 
 export default conversationApi;

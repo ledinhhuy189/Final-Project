@@ -50,6 +50,10 @@ const Header = () => {
    const navigate = useNavigate();
 
    const onClickLogo = () => navigate('/home');
+   const onClickProfile = () => navigate(`/profile/${userData.email}`);
+   const onClickCreateFood = () => navigate('/food/create');
+   const onClickMyOrder = () => navigate('/order/user');
+   const onClickCart = () => navigate('/cart');
 
    return (
       <Center background='white' borderWidth='0px 0 2px 0' h='20'>
@@ -79,8 +83,10 @@ const Header = () => {
                      >
                         Message
                      </Text>
-                     <Text {...subMenuStyle}>Blog</Text>
-                     <Text {...subMenuStyle}>Pricing</Text>
+                     <Text {...subMenuStyle} onClick={onClickMyOrder}>
+                        Order
+                     </Text>
+                     <Text {...subMenuStyle}>My Shop</Text>
                   </HStack>
                </GridItem>
                <GridItem colStart={16} colEnd={25}>
@@ -89,6 +95,10 @@ const Header = () => {
                         navigate={navigate}
                         userData={userData}
                         count={count}
+                        onClickProfile={onClickProfile}
+                        onClickCreateFood={onClickCreateFood}
+                        onClickMyOrder={onClickMyOrder}
+                        onClickCart={onClickCart}
                      />
                   ) : (
                      <UserNotLogin navigate={navigate} />
@@ -100,13 +110,13 @@ const Header = () => {
    );
 };
 
-const UserLogin = (props) => {
-   const { navigate, userData, count } = props;
-
-   const onClickProfile = () => navigate(`/profile/${userData.email}`);
-   const onClickCreateFood = () => navigate('/food/create');
-   const onClickMyOrder = () => navigate('/order/user');
-
+const UserLogin = ({
+   onClickProfile,
+   onClickCreateFood,
+   onClickMyOrder,
+   onClickCart,
+   count,
+}) => {
    const onClickLogout = async () => {
       const logoutResponse = await logout();
       if (logoutResponse.message === 'logout_success') {
@@ -132,7 +142,7 @@ const UserLogin = (props) => {
             borderWidth='1px'
             size='40px'
             cursor='pointer'
-            onClick={() => navigate('/cart')}
+            onClick={onClickCart}
             position='relative'
          >
             <Icon as={BsBagFill} fontSize='md' color='green.600' />
