@@ -5,7 +5,7 @@ const ContentContainer = (props) => {
    const { children } = props;
 
    return (
-      <Container maxW='1400px' mt='4' mb='4' minH='89vh'>
+      <Container maxW='1400px' mt='4' mb='4' minH='88vh'>
          {children}
       </Container>
    );

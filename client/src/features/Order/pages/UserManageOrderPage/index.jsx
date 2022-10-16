@@ -1,7 +1,6 @@
 import { Spinner, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import React, { useReducer } from 'react';
-import { useEffect } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import orderApi from '../../../../api/orderApi';
 import ManageUserOrderTable from '../../components/ManageUserOrderTable';
 import ManageUserOrderToolbar from '../../components/ManageUserOrderToolbar';

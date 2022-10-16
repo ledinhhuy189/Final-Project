@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import {
    BsBagFill,
+   BsFillEmojiLaughingFill,
    BsFillPersonFill,
    BsFillReplyFill,
    BsHeartFill,
@@ -54,6 +55,7 @@ const Header = () => {
    const onClickCreateFood = () => navigate('/food/create');
    const onClickMyOrder = () => navigate('/order/user');
    const onClickCart = () => navigate('/cart');
+   const onClickMyShop = () => navigate('/order/shop');
 
    return (
       <Center background='white' borderWidth='0px 0 2px 0' h='20'>
@@ -86,7 +88,9 @@ const Header = () => {
                      <Text {...subMenuStyle} onClick={onClickMyOrder}>
                         Order
                      </Text>
-                     <Text {...subMenuStyle}>My Shop</Text>
+                     <Text {...subMenuStyle} onClick={onClickMyShop}>
+                        My Shop
+                     </Text>
                   </HStack>
                </GridItem>
                <GridItem colStart={16} colEnd={25}>
@@ -99,6 +103,7 @@ const Header = () => {
                         onClickCreateFood={onClickCreateFood}
                         onClickMyOrder={onClickMyOrder}
                         onClickCart={onClickCart}
+                        onClickMyShop={onClickMyShop}
                      />
                   ) : (
                      <UserNotLogin navigate={navigate} />
@@ -115,6 +120,7 @@ const UserLogin = ({
    onClickCreateFood,
    onClickMyOrder,
    onClickCart,
+   onClickMyShop,
    count,
 }) => {
    const onClickLogout = async () => {
@@ -162,6 +168,12 @@ const UserLogin = ({
             <MenuList>
                <MenuItem icon={<Icon as={BsStack} />} onClick={onClickMyOrder}>
                   My Order
+               </MenuItem>
+               <MenuItem
+                  icon={<Icon as={BsFillEmojiLaughingFill} />}
+                  onClick={onClickMyShop}
+               >
+                  My Shop
                </MenuItem>
                <MenuDivider />
 

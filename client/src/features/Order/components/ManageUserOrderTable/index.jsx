@@ -11,7 +11,7 @@ import {
    Icon,
    Divider,
 } from '@chakra-ui/react';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { BsXCircleFill } from 'react-icons/bs';
 import { ORDER_STATUS } from '../../../../constants/orderStatus';
 import CustomTable from '../../../../global/components/CustomTable';
@@ -22,25 +22,36 @@ import { useNavigate } from 'react-router-dom';
 const ManageUserOrderTable = ({ orderData }) => {
    const navigate = useNavigate();
 
+   const onClickFood = useCallback(
+      (foodSlug) => navigate(`/food/${foodSlug}/detail`),
+      [navigate]
+   );
    const columns = useMemo(
       () => [
          {
             title: 'Image',
             width: '20%',
-            dataIndex: ['food', 'photoURL'],
+            dataIndex: ['food'],
             render: (value) => (
                <Image
-                  w='120px'
-                  h='120px'
+                  w='80px'
+                  h='80px'
                   rounded='xl'
-                  src={value[0]}
+                  src={value.photoURL[0]}
                   objectFit='cover'
+                  cursor='pointer'
+                  onClick={() => onClickFood(value.slug)}
                />
             ),
          },
          {
             title: 'Name',
-            dataIndex: ['food', 'name'],
+            dataIndex: ['food'],
+            render: (value) => (
+               <Text cursor='pointer' onClick={() => onClickFood(value.slug)}>
+                  {value.name}
+               </Text>
+            ),
          },
          {
             title: 'Quantity',
@@ -63,7 +74,7 @@ const ManageUserOrderTable = ({ orderData }) => {
             ),
          },
       ],
-      []
+      [onClickFood]
    );
 
    const onClickUserPrice = (email) => {
