@@ -13,6 +13,7 @@ const findMe = async ({ email }) => {
                id: true,
             },
          },
+         role: true,
       },
    });
 
@@ -64,8 +65,22 @@ const upsertUser = async ({
    return create;
 };
 
+const checkAccountStatus = async ({ email }) => {
+   const check = await userModel.findUnique({
+      where: {
+         email,
+      },
+      select: {
+         isDeleted: true,
+      },
+   });
+
+   return check;
+};
+
 module.exports = {
    findMe,
    findUser,
    upsertUser,
+   checkAccountStatus,
 };

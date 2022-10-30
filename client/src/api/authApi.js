@@ -14,6 +14,11 @@ const authApi = {
       });
    },
 
+   checkUserAccount: (params) => {
+      const url = '/user/lock';
+      return axiosClient.get(url, { params });
+   },
+
    getMeLocal: () => {
       const url = '/user/me/local';
       return axiosClient.get(url);

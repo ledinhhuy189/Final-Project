@@ -30,8 +30,20 @@ const upsertUserLocal = async (req, res, next) => {
    }
 };
 
+const checkAccountStatus = async (req, res, next) => {
+   try {
+      const checkResponse = await userService.checkAccountStatus({
+         email: req.query.email,
+      });
+      return res.json(checkResponse);
+   } catch (error) {
+      return next(error);
+   }
+};
+
 module.exports = {
    test,
    findMeLocal,
    upsertUserLocal,
+   checkAccountStatus,
 };

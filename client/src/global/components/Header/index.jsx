@@ -27,7 +27,7 @@ import {
 } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { authData } from '../../../features/Auth/authSlice';
+import { authData, userRole } from '../../../features/Auth/authSlice';
 import { cartCount } from '../../../features/Cart/cartSlice';
 import logout from '../../../firebase/logout';
 import useUserLogged from '../../../hooks/useUserLogged';
@@ -46,10 +46,12 @@ const subMenuStyle = {
 const Header = () => {
    const { userData } = useSelector(authData);
    const count = useSelector(cartCount);
+   const getUserRole = useSelector(userRole);
 
    const userLogged = useUserLogged();
    const navigate = useNavigate();
 
+   const onClickManageUser = () => navigate('/admin');
    const onClickLogo = () => navigate('/home');
    const onClickProfile = () => navigate(`/profile/${userData.email}`);
    const onClickCreateFood = () => navigate('/food/create');
@@ -79,18 +81,22 @@ const Header = () => {
                      >
                         Greenfood
                      </Text>
-                     <Text
-                        {...subMenuStyle}
-                        onClick={() => navigate('/message')}
-                     >
-                        Message
-                     </Text>
-                     <Text {...subMenuStyle} onClick={onClickMyOrder}>
-                        Order
-                     </Text>
-                     <Text {...subMenuStyle} onClick={onClickMyShop}>
-                        My Shop
-                     </Text>
+                     {getUserRole?.name !== 'ADMIN' && (
+                        <>
+                           <Text
+                              {...subMenuStyle}
+                              onClick={() => navigate('/message')}
+                           >
+                              Message
+                           </Text>
+                           <Text {...subMenuStyle} onClick={onClickMyOrder}>
+                              Order
+                           </Text>
+                           <Text {...subMenuStyle} onClick={onClickMyShop}>
+                              My Shop
+                           </Text>
+                        </>
+                     )}
                   </HStack>
                </GridItem>
                <GridItem colStart={16} colEnd={25}>
@@ -104,6 +110,7 @@ const Header = () => {
                         onClickMyOrder={onClickMyOrder}
                         onClickCart={onClickCart}
                         onClickMyShop={onClickMyShop}
+                        onClickManageUser={onClickManageUser}
                      />
                   ) : (
                      <UserNotLogin navigate={navigate} />
@@ -121,8 +128,11 @@ const UserLogin = ({
    onClickMyOrder,
    onClickCart,
    onClickMyShop,
+   onClickManageUser,
    count,
 }) => {
+   const getUserRole = useSelector(userRole);
+
    const onClickLogout = async () => {
       const logoutResponse = await logout();
       if (logoutResponse.message === 'logout_success') {
@@ -166,24 +176,39 @@ const UserLogin = ({
                </Circle>
             </MenuButton>
             <MenuList>
-               <MenuItem icon={<Icon as={BsStack} />} onClick={onClickMyOrder}>
-                  My Order
-               </MenuItem>
-               <MenuItem
-                  icon={<Icon as={BsFillEmojiLaughingFill} />}
-                  onClick={onClickMyShop}
-               >
-                  My Shop
-               </MenuItem>
+               {getUserRole?.name === 'ADMIN' ? (
+                  <MenuItem
+                     icon={<Icon as={BsStack} />}
+                     onClick={onClickManageUser}
+                  >
+                     Manage User
+                  </MenuItem>
+               ) : (
+                  <>
+                     <MenuItem
+                        icon={<Icon as={BsStack} />}
+                        onClick={onClickMyOrder}
+                     >
+                        My Order
+                     </MenuItem>
+                     <MenuItem
+                        icon={<Icon as={BsFillEmojiLaughingFill} />}
+                        onClick={onClickMyShop}
+                     >
+                        My Shop
+                     </MenuItem>
+                     <MenuDivider />
+
+                     <MenuItem
+                        icon={<Icon as={BsPencilFill} />}
+                        onClick={onClickCreateFood}
+                     >
+                        Create Food
+                     </MenuItem>
+                  </>
+               )}
                <MenuDivider />
 
-               <MenuItem
-                  icon={<Icon as={BsPencilFill} />}
-                  onClick={onClickCreateFood}
-               >
-                  Create Food
-               </MenuItem>
-               <MenuDivider />
                <MenuItem
                   icon={<Icon as={BsPersonFill} />}
                   onClick={onClickProfile}

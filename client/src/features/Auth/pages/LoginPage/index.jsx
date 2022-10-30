@@ -1,5 +1,6 @@
 import { Box, Flex, useBoolean, useToast } from '@chakra-ui/react';
 import React from 'react';
+import authApi from '../../../../api/authApi';
 import { loginWithEmail } from '../../../../firebase';
 import AuthTitle from '../../components/AuthTitle';
 import LoginForm from '../../components/LoginForm';
@@ -11,7 +12,26 @@ const LoginPage = () => {
    const handleSubmitLogin = async (formData) => {
       try {
          setFormLoading.on();
+         const checkAccountIsLocked = await authApi.checkUserAccount({
+            email: formData.email,
+         });
+
+         if (checkAccountIsLocked.isDeleted) {
+            toast({
+               title: 'Error.',
+               description: 'Account is locked.',
+               status: 'error',
+               duration: 5000,
+               isClosable: true,
+               position: 'top',
+            });
+            setFormLoading.off();
+
+            return;
+         }
+
          const loginResponse = await loginWithEmail(formData);
+
          if (loginResponse.message === 'login_firebase_successful') {
             setFormLoading.off();
             window.location = '/home';
