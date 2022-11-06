@@ -119,6 +119,7 @@ const getOrderOfUser = async ({ uid, orderStatusId, createdAtDirection }) => {
             },
          },
          orderStatus: true,
+         user: true,
       },
       orderBy: {
          createdAt: createdAtDirection || 'desc',
@@ -128,7 +129,7 @@ const getOrderOfUser = async ({ uid, orderStatusId, createdAtDirection }) => {
    return find;
 };
 
-const getOrderOfShop = async ({ uid }) => {
+const getOrderOfShop = async ({ uid, createdAtDirection }) => {
    const find = await orderModel.findMany({
       where: {
          orderItems: {
@@ -150,6 +151,10 @@ const getOrderOfShop = async ({ uid }) => {
             },
          },
          orderStatus: true,
+         user: true,
+      },
+      orderBy: {
+         createdAt: createdAtDirection || 'desc',
       },
    });
 

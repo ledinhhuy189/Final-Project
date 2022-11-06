@@ -18,9 +18,7 @@ const tableReducer = (state, action) => {
          };
 
       default:
-         throw new Error({
-            message: 'NOT_FOUND_ACTION',
-         });
+         throw new Error('NOT_FOUND_ACTION');
    }
 };
 

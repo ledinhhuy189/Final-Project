@@ -51,9 +51,23 @@ const getFoodOfUserInDb = async (req, res, next) => {
    }
 };
 
+const disableFoodInDb = async (req, res, next) => {
+   try {
+      const myFoodResponse = await foodService.disableFood({
+         foodId: req.params.foodId,
+         isDeleted: req.body.isDeleted,
+      });
+
+      return res.json(myFoodResponse);
+   } catch (error) {
+      return next(error);
+   }
+};
+
 module.exports = {
    getFoodListInDb,
    getFoodByIdInDb,
    createFoodInDb,
    getFoodOfUserInDb,
+   disableFoodInDb,
 };

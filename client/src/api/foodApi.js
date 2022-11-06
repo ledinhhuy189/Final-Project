@@ -6,6 +6,11 @@ const foodApi = {
       return axiosClient.get(url);
    },
 
+   disableFood: (foodId, isDeleted) => {
+      const url = `/food/${foodId}/disable`;
+      return axiosClient.patch(url, { isDeleted });
+   },
+
    getFoodOfUser: () => {
       const url = '/food/my';
       return axiosClient.get(url);

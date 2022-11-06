@@ -8,11 +8,11 @@ import {
    Text,
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
-import { BsPencil, BsTrash2 } from 'react-icons/bs';
+import { BsCheck, BsPencil, BsX } from 'react-icons/bs';
 import CustomTable from '../../../../global/components/CustomTable';
 import priceFormat from '../../../../utils/priceFormat';
 
-const ManageShopFood = ({ data }) => {
+const ManageShopFood = ({ data, onDisableFood }) => {
    const columns = useMemo(
       () => [
          {
@@ -67,13 +67,28 @@ const ManageShopFood = ({ data }) => {
             title: 'Action',
             render: (value) => (
                <Flex gap='4'>
-                  <IconButton icon={<Icon as={BsTrash2} />} rounded='full' />
+                  {value.isDeleted ? (
+                     <IconButton
+                        colorScheme='green'
+                        icon={<Icon as={BsCheck} />}
+                        rounded='full'
+                        onClick={() => onDisableFood(value.id, false)}
+                     />
+                  ) : (
+                     <IconButton
+                        colorScheme='red'
+                        icon={<Icon as={BsX} />}
+                        rounded='full'
+                        onClick={() => onDisableFood(value.id, true)}
+                     />
+                  )}
+
                   <IconButton icon={<Icon as={BsPencil} />} rounded='full' />
                </Flex>
             ),
          },
       ],
-      []
+      [onDisableFood]
    );
 
    return (

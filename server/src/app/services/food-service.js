@@ -17,8 +17,26 @@ const getFoodOfUser = async ({ uid }) => {
    return find;
 };
 
+const disableFood = async ({ foodId, isDeleted = null }) => {
+   const disable = await foodModel.update({
+      where: {
+         id: Number(foodId),
+      },
+      data: {
+         isDeleted: isDeleted ? new Date() : null,
+      },
+   });
+
+   return disable;
+};
+
 const getFoodList = async () => {
    const find = await foodModel.findMany({
+      where: {
+         AND: {
+            isDeleted: null,
+         },
+      },
       include: {
          user: true,
          category: true,
@@ -74,4 +92,5 @@ module.exports = {
    getFoodBySlug,
    createFood,
    getFoodOfUser,
+   disableFood,
 };

@@ -2,80 +2,31 @@ import {
    Avatar,
    Badge,
    Box,
+   Divider,
    Flex,
+   Heading,
+   Icon,
+   Select,
    Spacer,
    Text,
    VStack,
-   Image,
-   Heading,
-   Icon,
-   Divider,
 } from '@chakra-ui/react';
-import React, { useCallback, useMemo } from 'react';
+import { format } from 'date-fns';
+import React from 'react';
 import { BsXCircleFill } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 import { ORDER_STATUS } from '../../../../constants/orderStatus';
 import CustomTable from '../../../../global/components/CustomTable';
 import priceFormat from '../../../../utils/priceFormat';
-import { format } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
 
-const ManageUserOrderTable = ({ orderData }) => {
+const ManageOrderTable = ({
+   orderData,
+   columns,
+   userInfoHeader,
+   isDisplaySelectStatus = false,
+   onChangeOrderStatus,
+}) => {
    const navigate = useNavigate();
-
-   const onClickFood = useCallback(
-      (foodSlug) => navigate(`/food/${foodSlug}/detail`),
-      [navigate]
-   );
-   const columns = useMemo(
-      () => [
-         {
-            title: 'Image',
-            width: '20%',
-            dataIndex: ['food'],
-            render: (value) => (
-               <Image
-                  w='80px'
-                  h='80px'
-                  rounded='xl'
-                  src={value.photoURL[0]}
-                  objectFit='cover'
-                  cursor='pointer'
-                  onClick={() => onClickFood(value.slug)}
-               />
-            ),
-         },
-         {
-            title: 'Name',
-            dataIndex: ['food'],
-            render: (value) => (
-               <Text cursor='pointer' onClick={() => onClickFood(value.slug)}>
-                  {value.name}
-               </Text>
-            ),
-         },
-         {
-            title: 'Quantity',
-            dataIndex: ['quantity'],
-            render: (value) => <Text fontWeight='bold'>{value}</Text>,
-         },
-         {
-            title: 'Price',
-            dataIndex: ['food', 'price'],
-            render: (value) => (
-               <Text fontWeight='bold'>{priceFormat(value)}</Text>
-            ),
-         },
-         {
-            title: 'Sub total',
-            render: (value) => (
-               <Text fontWeight='bold'>
-                  {priceFormat(value.quantity * value.food.price)}
-               </Text>
-            ),
-         },
-      ],
-      [onClickFood]
-   );
 
    const onClickUserPrice = (email) => {
       navigate(`/profile/${email}`);
@@ -95,13 +46,11 @@ const ManageUserOrderTable = ({ orderData }) => {
                      gap={4}
                      alignItems='center'
                      cursor='pointer'
-                     onClick={() =>
-                        onClickUserPrice(o.orderItems[0].food.user.email)
-                     }
+                     onClick={() => onClickUserPrice(userInfoHeader(o).email)}
                   >
-                     <Avatar src={o.orderItems[0].food.user.photoURL} />
+                     <Avatar src={userInfoHeader(o).avatar} />
                      <Text fontWeight='bold' fontSize='18px'>
-                        {o.orderItems[0].food.user.name}
+                        {userInfoHeader(o).name}
                      </Text>
                   </Flex>
                   <Divider
@@ -137,6 +86,30 @@ const ManageUserOrderTable = ({ orderData }) => {
                   borderTopWidth='1px'
                   alignItems='center'
                >
+                  {isDisplaySelectStatus && (
+                     <Box>
+                        <Select
+                           placeholder='Select option'
+                           defaultValue={o.orderStatus.id}
+                           onChange={(e) =>
+                              onChangeOrderStatus({
+                                 orderId: o.id,
+                                 orderStatusId: e.target.value,
+                              })
+                           }
+                        >
+                           {Object.keys(ORDER_STATUS).map((order) => (
+                              <option
+                                 value={ORDER_STATUS[order].id}
+                                 key={order}
+                              >
+                                 {ORDER_STATUS[order].name}
+                              </option>
+                           ))}
+                        </Select>
+                     </Box>
+                  )}
+
                   <Spacer />
                   <Text pr='2' fontSize='18px'>
                      Total price:
@@ -163,4 +136,4 @@ const ManageUserOrderTable = ({ orderData }) => {
    );
 };
 
-export default ManageUserOrderTable;
+export default ManageOrderTable;

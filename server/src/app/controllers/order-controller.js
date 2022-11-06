@@ -48,7 +48,7 @@ const findOrderOfShopInDb = async (req, res, next) => {
 
 const changeOrderStatusInDb = async (req, res, next) => {
    try {
-      const { orderId, orderStatusId } = req.query;
+      const { orderId, orderStatusId } = req.body;
 
       const changeStatusOfOrderResponse =
          await orderService.changeStatusOfOrder({
