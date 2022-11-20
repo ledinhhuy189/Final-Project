@@ -9,41 +9,57 @@ import {
 import { Formik } from 'formik';
 import React from 'react';
 import { BsFillCartFill } from 'react-icons/bs';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
-import { authData } from '../../../Auth/authSlice';
-
+import foodApi from '../../../../api/foodApi';
 import CustomBreadcrumb from '../../../../global/components/CustomBreadcrumb';
 import CreateFoodDescription from '../../components/CreateFoodDescription';
 import CreateFoodImage from '../../components/CreateFoodImage';
 import CreateFoodOverview from '../../components/CreateFoodOverview';
-import { uploadFile } from '../../../../firebase';
-import foodApi from '../../../../api/foodApi';
 
 const CreateFoodPage = () => {
    const toast = useToast();
    const navigate = useNavigate();
-   const {
-      userData: { email },
-   } = useSelector(authData);
+   const location = useLocation();
 
-   const initialValues = {
-      foodName: '',
-      price: 0,
-      category: '',
-      stock: 0,
+   const editFoodData =
+      location.pathname.split('/').some((p) => p === 'edit') && location.state;
+   console.log('🚀 ~ editFoodData', editFoodData);
 
-      shortDescription: '',
-      description: '',
-      images: [],
-   };
+   const editFoodDataImages = Boolean(editFoodData)
+      ? editFoodData.photoURL.map((p, index) => ({
+           id: index,
+           preview: p,
+        }))
+      : [];
+
+   const initialValues = editFoodData
+      ? {
+           foodName: editFoodData.name,
+           price: editFoodData.price,
+           category: editFoodData.category.id,
+           stock: editFoodData.stock,
+
+           shortDescription: editFoodData.shortDescription,
+           description: editFoodData.description,
+           images: editFoodDataImages,
+        }
+      : {
+           foodName: '',
+           price: 0,
+           category: '',
+           stock: 0,
+
+           shortDescription: '',
+           description: '',
+           images: [],
+        };
 
    const validationSchema = Yup.object().shape({
       foodName: Yup.string().required(),
       category: Yup.string().required(),
-      stock: Yup.number().integer().min(1),
+      stock: Yup.number().integer().min(0),
 
       description: Yup.string().required(),
       shortDescription: Yup.string().required(),
@@ -54,31 +70,28 @@ const CreateFoodPage = () => {
       try {
          const { foodName, images } = formValue;
 
-         const uploadImagePromises = images.map(async (image) => {
-            const uploadImageURL = await uploadFile({
-               email,
-               file: image,
-               baseDirectory: `foods`,
-            });
-
-            return uploadImageURL;
-         });
-
-         const uploadImageResult = await Promise.all(uploadImagePromises);
-
          const formatFormData = {
             ...formValue,
             name: foodName,
-            photoURL: uploadImageResult,
+            photoURL: images.map((i) => i.preview),
          };
 
-         delete formatFormData.images;
+         let response;
 
-         const createFoodResponse = await foodApi.createFood(formatFormData);
+         if (!editFoodData) {
+            response = await foodApi.createFood(formatFormData);
+         } else {
+            response = await foodApi.updateFood({
+               ...formatFormData,
+               id: editFoodData.id,
+            });
+         }
 
-         if (createFoodResponse) {
+         if (response) {
             toast({
-               title: 'Create food success. Thank you!',
+               title: `${
+                  Boolean(editFoodData) ? 'Update' : 'Create'
+               } food success. Thank you!`,
                status: 'success',
                position: 'top-right',
             });
@@ -108,7 +121,7 @@ const CreateFoodPage = () => {
                <VStack gap='6' w='full'>
                   <CreateFoodOverview />
                   <CreateFoodDescription />
-                  <CreateFoodImage />
+                  <CreateFoodImage editFoodDataImage={editFoodDataImages} />
                   <Grid
                      templateColumns='repeat(4, 1fr)'
                      gap={12}
@@ -126,7 +139,7 @@ const CreateFoodPage = () => {
                            isLoading={isSubmitting}
                            loadingText='Creating...'
                         >
-                           Create Product
+                           {Boolean(editFoodData) ? 'Update' : 'Create'} Product
                         </Button>
                      </GridItem>
                   </Grid>

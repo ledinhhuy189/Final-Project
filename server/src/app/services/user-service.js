@@ -25,6 +25,14 @@ const findUser = async ({ email }) => {
       where: {
          email,
       },
+      include: {
+         foods: {
+            include: {
+               user: true,
+               category: true,
+            },
+         },
+      },
    });
 
    return find;

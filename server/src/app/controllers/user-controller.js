@@ -41,9 +41,21 @@ const checkAccountStatus = async (req, res, next) => {
    }
 };
 
+const findUser = async (req, res, next) => {
+   try {
+      const userResponse = await userService.findUser({
+         email: req.query.email,
+      });
+      return res.json(userResponse);
+   } catch (error) {
+      return next(error);
+   }
+};
+
 module.exports = {
    test,
    findMeLocal,
    upsertUserLocal,
    checkAccountStatus,
+   findUser,
 };

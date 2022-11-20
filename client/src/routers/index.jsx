@@ -14,6 +14,7 @@ import Loader from '../layouts/Loader';
 import Main from '../layouts/Main';
 import Private from '../layouts/Private';
 import Notification from '../features/Notification';
+import Category from '../features/Category';
 
 const Routers = () => {
    return (
@@ -33,6 +34,7 @@ const Routers = () => {
                <Route path='/cart/*' element={<Cart />} />
                <Route path='/message/*' element={<Message />} />
                <Route path='/admin/*' element={<Admin />} />
+               <Route path='/category/*' element={<Category />} />
             </Route>
             <Route path='*' element={<NotFoundPage />} />
          </Routes>

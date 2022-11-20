@@ -16,19 +16,28 @@ import { BsFillXCircleFill } from 'react-icons/bs';
 import { v4 as uuidv4 } from 'uuid';
 import { useFormikContext } from 'formik';
 import { useEffect } from 'react';
+import { authData } from '../../../Auth/authSlice';
+import { uploadFile } from '../../../../firebase';
+import { useSelector } from 'react-redux';
 
 const ACCEPT_FILE_TYPE = ['image/jpg', 'image/png', 'image/jpeg'];
 
-const CreateFoodImage = () => {
+const CreateFoodImage = ({ editFoodDataImage }) => {
    const toast = useToast();
+
+   const {
+      userData: { email },
+   } = useSelector(authData);
 
    // Formik in features/Food/CreateFood component
    const { setFieldValue, errors, touched, setFieldTouched, isSubmitting } =
       useFormikContext();
 
-   const [previewImageList, setPreviewImageList] = useState([]);
+   const [previewImageList, setPreviewImageList] = useState(
+      editFoodDataImage || []
+   );
 
-   const onDrop = useCallback((file) => {
+   const onDrop = useCallback(async (file) => {
       if (!ACCEPT_FILE_TYPE.includes(file[0].type))
          return toast({
             title: 'Only accept .jpg, .jpeg, and .png',
@@ -36,10 +45,16 @@ const CreateFoodImage = () => {
             position: 'top-right',
          });
 
-      const fileWithPreview = Object.assign(file[0], {
-         id: uuidv4(),
-         preview: URL.createObjectURL(file[0]),
+      const uploadImageURL = await uploadFile({
+         email,
+         file: file[0],
+         baseDirectory: `foods`,
       });
+
+      const fileWithPreview = {
+         id: uuidv4(),
+         preview: uploadImageURL,
+      };
 
       setPreviewImageList((prev) => [...prev, fileWithPreview]);
       //eslint-disable-next-line

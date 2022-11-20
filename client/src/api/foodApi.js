@@ -25,6 +25,11 @@ const foodApi = {
       const url = '/food';
       return axiosClient.post(url, data);
    },
+
+   updateFood: (data) => {
+      const url = '/food';
+      return axiosClient.patch(url, data);
+   },
 };
 
 export default foodApi;

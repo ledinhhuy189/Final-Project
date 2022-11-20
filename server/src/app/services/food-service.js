@@ -87,10 +87,43 @@ const createFood = async ({ foodFormData, userData }) => {
    return create;
 };
 
+const updateFood = async ({ foodFormData, userData }) => {
+   const {
+      id,
+      category,
+      price,
+      stock,
+      description,
+      shortDescription,
+      name,
+      photoURL,
+   } = foodFormData;
+
+   const update = await foodModel.update({
+      where: {
+         id: Number(id),
+      },
+      data: {
+         categoryId: Number(category),
+         price: parseFloat(price),
+         stock: Number(stock),
+         slug: `${slugify(name)}-${uuidv4()}`,
+
+         description,
+         shortDescription,
+         name,
+         photoURL,
+      },
+   });
+
+   return update;
+};
+
 module.exports = {
    getFoodList,
    getFoodBySlug,
    createFood,
    getFoodOfUser,
    disableFood,
+   updateFood,
 };

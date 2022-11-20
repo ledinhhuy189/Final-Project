@@ -144,7 +144,7 @@ const UserLogin = ({
 
    return (
       <Flex justifyContent='end' gap='20px'>
-         <Search />
+         {/* <Search /> */}
          <Circle
             borderColor='gray.300'
             borderWidth='1px'

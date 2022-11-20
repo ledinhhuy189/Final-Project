@@ -37,6 +37,21 @@ const createFoodInDb = async (req, res, next) => {
    }
 };
 
+const updateFoodInDb = async (req, res, next) => {
+   try {
+      const userData = req.getUserInfoByToken;
+
+      const updateFoodResponse = await foodService.updateFood({
+         foodFormData: { ...req.body },
+         userData,
+      });
+
+      return res.json(updateFoodResponse);
+   } catch (error) {
+      return next(error);
+   }
+};
+
 const getFoodOfUserInDb = async (req, res, next) => {
    try {
       const userData = req.getUserInfoByToken;
@@ -70,4 +85,5 @@ module.exports = {
    createFoodInDb,
    getFoodOfUserInDb,
    disableFoodInDb,
+   updateFoodInDb,
 };

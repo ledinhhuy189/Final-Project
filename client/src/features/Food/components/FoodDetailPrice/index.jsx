@@ -21,7 +21,8 @@ import { useNavigate } from 'react-router-dom';
 import priceFormat from '../../../../utils/priceFormat';
 
 const FoodDetailPrice = (props) => {
-   const { foodPrice, onClickCart, isAddButtonLoading } = props;
+   const { foodPrice, onClickCart, isAddButtonLoading, isDisableAddButton } =
+      props;
 
    const navigate = useNavigate();
 
@@ -72,8 +73,9 @@ const FoodDetailPrice = (props) => {
                leftIcon={<Icon as={BsFillCheckCircleFill} />}
                isLoading={isAddButtonLoading}
                loadingText='Adding...'
+               isDisabled={isDisableAddButton}
             >
-               Add to cart
+               {isDisableAddButton ? 'Run out of stock' : 'Add to cart'}
             </Button>
 
             <IconButton

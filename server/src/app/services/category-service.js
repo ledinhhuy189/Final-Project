@@ -8,6 +8,33 @@ const getCategoryList = async () => {
    return find;
 };
 
+const getFoodInCategory = async ({ categoryId, name }) => {
+   const find = await prisma.food.findMany({
+      where: {
+         AND: [
+            {
+               category: {
+                  id: Number(categoryId),
+               },
+            },
+            {
+               name: {
+                  contains: name,
+                  mode: 'insensitive',
+               },
+            },
+         ],
+      },
+      include: {
+         category: true,
+         user: true,
+      },
+   });
+
+   return find;
+};
+
 module.exports = {
    getCategoryList,
+   getFoodInCategory,
 };

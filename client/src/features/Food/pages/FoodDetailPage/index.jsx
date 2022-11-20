@@ -135,6 +135,7 @@ const FoodDetailPage = () => {
                      foodPrice={foodDetail?.price}
                      onClickCart={handleClickCart}
                      isAddButtonLoading={isAddButtonLoading}
+                     isDisableAddButton={foodDetail?.stock === 0}
                   />
                </GridItem>
             </Grid>

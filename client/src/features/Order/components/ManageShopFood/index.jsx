@@ -9,10 +9,13 @@ import {
 } from '@chakra-ui/react';
 import React, { useMemo } from 'react';
 import { BsCheck, BsPencil, BsX } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 import CustomTable from '../../../../global/components/CustomTable';
 import priceFormat from '../../../../utils/priceFormat';
 
 const ManageShopFood = ({ data, onDisableFood }) => {
+   const navigate = useNavigate();
+
    const columns = useMemo(
       () => [
          {
@@ -83,12 +86,23 @@ const ManageShopFood = ({ data, onDisableFood }) => {
                      />
                   )}
 
-                  <IconButton icon={<Icon as={BsPencil} />} rounded='full' />
+                  <IconButton
+                     icon={<Icon as={BsPencil} />}
+                     rounded='full'
+                     onClick={() =>
+                        navigate(
+                           {
+                              pathname: `/food/${value.id}/edit`,
+                           },
+                           { state: value }
+                        )
+                     }
+                  />
                </Flex>
             ),
          },
       ],
-      [onDisableFood]
+      [onDisableFood, navigate]
    );
 
    return (

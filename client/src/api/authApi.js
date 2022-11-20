@@ -28,6 +28,11 @@ const authApi = {
       const url = '/user/upsert';
       return axiosClient.post(url, data);
    },
+
+   getUser: (params) => {
+      const url = '/user';
+      return axiosClient.get(url, { params });
+   },
 };
 
 export default authApi;
