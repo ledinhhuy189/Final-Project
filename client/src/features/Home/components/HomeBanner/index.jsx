@@ -12,7 +12,7 @@ const HomeBanner = () => {
          spaceBetween={20}
          slidesPerView={1}
          loop={true}
-         style={{ borderRadius: 10 }}
+         style={{ borderRadius: 10, zIndex: 0 }}
       >
          <SwiperSlide>
             <Image src={image2} rounded='xl' />
